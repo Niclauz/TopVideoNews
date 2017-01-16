@@ -9,9 +9,9 @@ import com.tencent.tinker.lib.tinker.TinkerInstaller;
 import com.tencent.tinker.lib.util.TinkerLog;
 import com.tencent.tinker.loader.app.ApplicationLike;
 
-import cn.com.ichile.topvideonews.SampleResultService;
-import cn.com.ichile.topvideonews.SimpleUncaughtExceptionHandler;
-import cn.tinker.UpgradePatchRetry;
+import cn.tinker.reporter.SampleLoadReporter;
+import cn.tinker.reporter.SamplePatchListener;
+import cn.tinker.reporter.SamplePatchReporter;
 
 /**
  * FBI WARNING ! MAGIC ! DO NOT TOUGH !
