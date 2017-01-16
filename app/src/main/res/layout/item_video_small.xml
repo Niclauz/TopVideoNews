@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base110dp"
+                android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/ll_player_cover_small"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_video_pre_small"
+            android:layout_width="@dimen/base150dp"
+            android:layout_height="match_parent"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/iv_video_pre_small"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_video_title_small"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base80dp"
+                android:maxLines="2"
+                android:padding="@dimen/base10dp"
+                android:text="床前明月光，床前明月光，床前明月光，床前明月光"
+                android:textSize="20sp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/base10dp"
+                android:paddingRight="@dimen/base10dp">
+
+                <TextView
+                    android:id="@+id/tv_video_author_small"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="凤凰网"
+                    android:textSize="16sp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/ib_item_share_small"
+                        android:layout_width="@dimen/base38dp"
+                        android:layout_height="@dimen/base38dp"
+                        android:src="@drawable/ic_menu_share"/>
+
+                    <ImageButton
+                        android:id="@+id/ib_item_like_small"
+                        android:layout_width="@dimen/base38dp"
+                        android:layout_height="@dimen/base38dp"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/ic_menu_send"/>
+                </LinearLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

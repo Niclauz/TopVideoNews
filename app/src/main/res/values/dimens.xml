@@ -1,0 +1,19 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">@dimen/base16dp</dimen>
+    <dimen name="nav_header_height">@dimen/base160dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">@dimen/base16dp</dimen>
+    <dimen name="activity_vertical_margin">@dimen/base16dp</dimen>
+    <dimen name="fab_margin">@dimen/base16dp</dimen>
+
+    <!-- MEDIA CONTROLLER -->
+    <dimen name="media_controller_text_size">14sp</dimen>
+    <dimen name="media_controller_seekbar_width">@dimen/base32dp</dimen>
+    <dimen name="media_controller_seekbar_height">@dimen/base32dp</dimen>
+    <dimen name="media_controller_top_margin">@dimen/base80dp</dimen>
+    <dimen name="media_controller_bottom_margin">@dimen/base12dp</dimen>
+    <dimen name="media_controller_view_height">@dimen/base48dp</dimen>
+    <dimen name="media_controller_button_height">@dimen/base52dp</dimen>
+    <dimen name="media_controller_button_width">@dimen/base71dp</dimen>
+</resources>

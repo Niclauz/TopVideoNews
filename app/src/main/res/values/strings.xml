@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">最新闻</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="recomm_prefecture_video_erro">VideoError</string>
+
+</resources>
