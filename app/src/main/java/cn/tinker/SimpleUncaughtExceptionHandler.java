@@ -1,4 +1,4 @@
-package cn.com.ichile.topvideonews;
+package cn.tinker;
 
 import cn.com.ichile.topvideonews.util.Logger;
 
