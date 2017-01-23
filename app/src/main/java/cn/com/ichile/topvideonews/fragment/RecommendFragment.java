@@ -1,20 +1,25 @@
 package cn.com.ichile.topvideonews.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
-import cn.com.ichile.topvideonews.Cons;
 import cn.com.ichile.topvideonews.R;
 import cn.com.ichile.topvideonews.adapter.RecommendRecyAdapter;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
-import cn.com.ichile.topvideonews.net.NetUtil;
+import cn.com.ichile.topvideonews.net.DataUtil;
 import cn.com.ichile.topvideonews.widget.VideoSuperPlayer;
 
 /**
@@ -29,6 +34,11 @@ public class RecommendFragment extends BaseFragment {
     private boolean isPrepared;
     private RecyclerView.OnScrollListener onScrollListener;
 
+
+    public RecyclerView getRecycleView() {
+        return mRecycleView;
+    }
+
     @Nullable
     @Override
     public View inflateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,59 +52,88 @@ public class RecommendFragment extends BaseFragment {
     public void initView(View view) {
         initSwipeRef(view);
         initRecycleView(view);
-
     }
 
     @Override
     protected void lazyLoad() {
-        if (!isVisiable || !isPrepared) {
+        if (!isVisiable || !isPrepared || mRecommendRecyAdapter == null) {
             return;
         }
         //设置数据
-        NetUtil.getVideoList(Cons.RECOMMEND, mRecommendRecyAdapter);
-
+        // DataUtil.getVideoList(Cons.RECOMMEND, mRecommendRecyAdapter);
+        DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionName);
     }
 
 
     private void initRecycleView(View view) {
         mRecycleView = (RecyclerView) view.findViewById(R.id.rv_recommend);
         mRecycleView.setHasFixedSize(true);
-        mRecycleView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        final WrapContentLinearLayoutManager layoutManager = new WrapContentLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        mRecycleView.setLayoutManager(layoutManager);
         mRecycleView.setItemAnimator(new DefaultItemAnimator());
 //        mRecycleView.addItemDecoration(new );
+        mRecommendRecyAdapter = new RecommendRecyAdapter(getActivity(), null,mSwipeRef);
         mRecycleView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            private int mLastVisibleItemPosition;
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                if (newState == recyclerView.SCROLL_STATE_IDLE
+                        && mLastVisibleItemPosition + 1 == mRecommendRecyAdapter.getItemCount()) {
+                    //***************load more
+                    int size = mRecommendRecyAdapter.getData().size();
+                    long startId = size <= 1 ? 0 : mRecommendRecyAdapter.getData().get(mRecommendRecyAdapter.getData().size() - 1).getMainContent().getId();
+                    DataUtil.getMoreSectionList(mRecommendRecyAdapter, productCode, sectionName, startId);
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                mLastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
             }
         });
 
-        mRecommendRecyAdapter = new RecommendRecyAdapter(getActivity(), null);
         mRecycleView.setAdapter(mRecommendRecyAdapter);
         mRecommendRecyAdapter.notifyDataSetChanged();
     }
 
-    private void initSwipeRef(View view) {
+    private void initSwipeRef(final View view) {
         mSwipeRef = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_recommend);
+        mSwipeRef.setColorSchemeColors(R.color.colorActionBar);
+        mSwipeRef.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Snackbar snackbar = Snackbar.make(view, "刷新", Snackbar.LENGTH_SHORT)
+                        .setAction("确定", null);
+                snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorActionBar));
+                View snackbarView = snackbar.getView();
+                TextView tv = (TextView) snackbarView.findViewById(R.id.snackbar_text);
+                Button button = (Button) snackbarView.findViewById(R.id.snackbar_action);
+                tv.setGravity(Gravity.CENTER);
+                tv.setTextSize(18);
+                button.setTextColor(getResources().getColor(R.color.colorWhite));
+                snackbar.show();
+
+                DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionName);
+            }
+        });
     }
 
-
-    @Override
-    public String setDataType() {
-        return Cons.RECOMMEND;
-    }
 
     @Override
     public OnNetDataCallback getItemAdapter() {
         return mRecommendRecyAdapter;
     }
 
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //初始化首页数据
-        NetUtil.getVideoList(Cons.RECOMMEND, mRecommendRecyAdapter);
+        //DataUtil.getVideoList(Cons.RECOMMEND, mRecommendRecyAdapter);
+
+        DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionName);
 
         onScrollListener = new RecyclerView.OnScrollListener() {
             private int mLastVisibleItemPosition;
@@ -154,5 +193,28 @@ public class RecommendFragment extends BaseFragment {
     public void onDestroyView() {
         mRecycleView.removeOnScrollListener(onScrollListener);
         super.onDestroyView();
+    }
+
+    class WrapContentLinearLayoutManager extends LinearLayoutManager {
+        public WrapContentLinearLayoutManager(Context context) {
+            super(context);
+        }
+
+        public WrapContentLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
+            super(context, orientation, reverseLayout);
+        }
+
+        public WrapContentLinearLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+            super(context, attrs, defStyleAttr, defStyleRes);
+        }
+
+        @Override
+        public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+            try {
+                super.onLayoutChildren(recycler, state);
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

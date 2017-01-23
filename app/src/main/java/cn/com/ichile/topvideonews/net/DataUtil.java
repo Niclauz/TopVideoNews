@@ -5,6 +5,8 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,15 +19,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import cn.api.Sdk;
+import cn.api.message.ContentListOfSectionQueryRequest;
+import cn.api.message.ContentListOfSectionQueryResponse;
+import cn.api.message.SectionQueryRequest;
+import cn.api.message.SectionQueryResponse;
 import cn.com.ichile.topvideonews.App;
 import cn.com.ichile.topvideonews.Cons;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
 import cn.com.ichile.topvideonews.domain.VideoBean;
+import cn.com.ichile.topvideonews.util.Logger;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.ConnectionPool;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -33,16 +43,17 @@ import okhttp3.Response;
  * Created by WangZQ on 2016/12/30 - 15:48.
  */
 
-public class NetUtil {
+public class DataUtil {
+    public static final MediaType MEDIA_JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final String TAG = "DataUtil";
     private static OkHttpClient mOkHttpClient;
     private static String mType;
     private static OnNetDataCallback mOnNetDataCallback;
-
     private static android.os.Handler mHandler = new android.os.Handler(Looper.getMainLooper());
 
     private static OkHttpClient initHttpClinet() {
 //        if (mOkHttpClient == null) {
-//            synchronized (NetUtil.class) {
+//            synchronized (DataUtil.class) {
 //                if (mOkHttpClient == null) {
 //                    mOkHttpClient = new OkHttpClient();
 //                }
@@ -50,7 +61,7 @@ public class NetUtil {
 //        }
 
         if (mOkHttpClient == null) {
-            synchronized (NetUtil.class) {
+            synchronized (DataUtil.class) {
                 if (mOkHttpClient == null) {
                     OkHttpClient.Builder builder = new OkHttpClient.Builder();
                     builder.connectionPool(new ConnectionPool(10, 60000, TimeUnit.SECONDS));
@@ -62,16 +73,111 @@ public class NetUtil {
         return mOkHttpClient;
     }
 
-    public static void getVideoList(String type, OnNetDataCallback onNetDataCallback) {
+    public static <T> void doPost(String url, Object object, final Class<T> clazz, final boolean isMore, final OnNetDataCallback onNetDataCallback) throws Exception {
+        OkHttpClient okHttpClient = initHttpClinet();
+        String json = new Gson().toJson(object);
+        final Request request = new Request.Builder()
+                .url(url)
+                .post(RequestBody.create(MEDIA_JSON, json))
+                .build();
 
-        mOnNetDataCallback = onNetDataCallback;
-        getNetVideoList(type, onNetDataCallback);
-       // getNativeVideoList(type, onNetDataCallback);
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                onNetDataCallback.onError(e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    Logger.i(TAG, "******" + response.body().toString());
+                    final T resp = new Gson().fromJson(response.body().charStream(), clazz);
+//                    if (resp instanceof SectionQueryResponse) {
+//                        SectionQueryResponse sectionQueryResponse = (SectionQueryResponse) resp;
+//                    }else if(resp instanceof ContentListOfSectionQueryResponse) {
+//                        ContentListOfSectionQueryResponse clsResponse = (ContentListOfSectionQueryResponse) resp;
+//                    }else if(resp instanceof SectionWithContentQueryResponse) {
+//                        SectionWithContentQueryResponse swcResponse = (SectionWithContentQueryResponse) resp;
+//                    }
+                    Logger.i("sss", resp.toString());
+                    if (isMore) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onNetDataCallback.onMore(resp);
+                            }
+                        });
+                    } else {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onNetDataCallback.onSuccess(resp);
+                            }
+                        });
+                    }
+
+                } else {
+                    throw new IOException("response error--" + response.message());
+                }
+
+            }
+        });
+    }
+
+    public static void cancelCall() {
+
+    }
+
+    public static void getTabList(OnNetDataCallback onNetDataCallback) {
+        try {
+            SectionQueryRequest sqr = new SectionQueryRequest();
+            sqr.setChannelId("1");
+            sqr.setProductCode("1");
+            doPost(Sdk.Url.SectionQueryUrl, sqr, SectionQueryResponse.class, false, onNetDataCallback);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void getSectionList(OnNetDataCallback onNetDataCallback, String productCode, String sectionName) {
+        getMoreSectionList(onNetDataCallback, productCode, sectionName, 0);
+    }
+
+
+    public static void getMoreSectionList(OnNetDataCallback onNetDataCallback, String productCode, String sectionName, long startId) {
+        try {
+            ContentListOfSectionQueryRequest csqRequest = new ContentListOfSectionQueryRequest();
+            csqRequest.setProductCode(productCode);
+            csqRequest.setSectionName(sectionName);
+            csqRequest.setPageSize(10);
+            csqRequest.setStartId(startId < 0 ? 0 : startId);
+            boolean isMore = startId <= 0 ? false : true;
+            Logger.i(TAG,"startId--" + startId);
+            doPost(Sdk.Url.ContentListOfsectionUrl, csqRequest, ContentListOfSectionQueryResponse.class, isMore, onNetDataCallback);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void getVideoList(String type, OnNetDataCallback onNetDataCallback) {
+        try {
+            mOnNetDataCallback = onNetDataCallback;
+            getNetVideoList(type, onNetDataCallback);
+            // getNativeVideoList(type, onNetDataCallback);
+
+            SectionQueryRequest sqr = new SectionQueryRequest();
+            sqr.setChannelId("1");
+            sqr.setProductCode("1");
+            //doPost(Sdk.Url.SectionQueryUrl, sqr, SectionQueryResponse.class, onNetDataCallback);
+        } catch (Exception e) {
+            Logger.i(TAG, e.getMessage());
+        }
     }
 
     public static void getNetVideoList(String type, OnNetDataCallback onNetDataCallback) {
         mType = type;
-        Log.i("NetUtil", mType);
+        Log.i("DataUtil", mType);
         mOnNetDataCallback = onNetDataCallback;
 
         try {
@@ -81,7 +187,7 @@ public class NetUtil {
             okHttpClient.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    mOnNetDataCallback.onError(e.getMessage());
+                    mOnNetDataCallback.onError(e);
                 }
 
                 @Override
@@ -205,4 +311,5 @@ public class NetUtil {
 
         return sb;
     }
+
 }

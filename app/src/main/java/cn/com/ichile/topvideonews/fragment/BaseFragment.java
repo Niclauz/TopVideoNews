@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import cn.api.model.Section;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
 
 /**
@@ -14,8 +15,20 @@ import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
  * Created by WangZQ on 2016/12/29 - 14:17.
  */
 
-public abstract class BaseFragment extends Fragment{
+public abstract class BaseFragment extends Fragment {
+    protected String sectionName;
+    protected String productCode;
+    //当页面可见时数据加载
+    protected boolean isVisiable;
 
+    @Override
+    public void setArguments(Bundle args) {
+        Section section = (Section) args.getSerializable("section");
+        if (section != null)
+            sectionName = section.getName();
+        productCode = section.getProductCode();
+        super.setArguments(args);
+    }
 
     @Nullable
     @Override
@@ -29,25 +42,21 @@ public abstract class BaseFragment extends Fragment{
     @Nullable
     public abstract View inflateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
 
-    public abstract String setDataType();
 
     public abstract OnNetDataCallback getItemAdapter();
 
     public abstract void initView(View view);
 
-    //当页面可见时数据加载
-    protected boolean isVisiable;
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (getUserVisibleHint()) {
             isVisiable = true;
             onVisiable();
-        }else{
+        } else {
             isVisiable = false;
             onInviable();
         }
-       // NetUtil.getVideoList(setDataType(),getItemAdapter());
     }
 
     protected void onVisiable() {
@@ -60,4 +69,5 @@ public abstract class BaseFragment extends Fragment{
     }
 
     protected abstract void lazyLoad();
+
 }

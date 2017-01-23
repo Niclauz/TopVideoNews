@@ -6,8 +6,8 @@ import android.content.pm.ActivityInfo;
 import android.view.View;
 import android.widget.ImageView;
 
+import cn.api.model.ContentMain;
 import cn.com.ichile.topvideonews.activity.FullVideoActivity;
-import cn.com.ichile.topvideonews.domain.VideoBean;
 
 /**
  * FBI WARNING ! MAGIC ! DO NOT TOUGH !
@@ -18,13 +18,13 @@ public class ListVideoPlayCallback implements VideoSuperPlayer.VideoPlayCallback
     private Activity mActivity;
     private VideoSuperPlayer mVideoSuperPlayer;
     private ImageView mBtn_play;
-    private VideoBean mVideoBean;
+    private ContentMain mContentMain;
     private PlayStateCallback mPlayStateCallback;
 
-    public ListVideoPlayCallback(Activity activity, VideoSuperPlayer videoSuperPlayer, ImageView btn_play, VideoBean videoBean, PlayStateCallback playStateCallback) {
+    public ListVideoPlayCallback(Activity activity, VideoSuperPlayer videoSuperPlayer, ImageView btn_play, ContentMain contentMain, PlayStateCallback playStateCallback) {
         mActivity = activity;
         mVideoSuperPlayer = videoSuperPlayer;
-        mVideoBean = videoBean;
+        mContentMain = contentMain;
         mBtn_play = btn_play;
         mPlayStateCallback = playStateCallback;
     }
@@ -38,7 +38,7 @@ public class ListVideoPlayCallback implements VideoSuperPlayer.VideoPlayCallback
     public void onSwitchPageType() {
         if (((Activity) mActivity).getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             Intent intent = new Intent(new Intent(mActivity, FullVideoActivity.class));
-            intent.putExtra("video", mVideoBean);
+            intent.putExtra("video", mContentMain);
             intent.putExtra("position", mVideoSuperPlayer.getCurrentPosition());
             ((Activity) mActivity).startActivityForResult(intent, 1);
         }

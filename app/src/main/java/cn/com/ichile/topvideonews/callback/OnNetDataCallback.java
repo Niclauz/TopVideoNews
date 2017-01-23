@@ -8,6 +8,8 @@ package cn.com.ichile.topvideonews.callback;
 public interface OnNetDataCallback{
     void onSuccess(Object... data);
 
+    void onMore(Object... data);
+
     void onError(Object... error);
 
     void onProgress(int progress);

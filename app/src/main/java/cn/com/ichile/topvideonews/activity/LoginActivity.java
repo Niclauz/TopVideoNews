@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import java.util.HashMap;
@@ -34,8 +35,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private RelativeLayout mBtnQQ;
     private Context context;
 
+
     @Override
     public void baseOnCreate(@Nullable Bundle savedInstanceState) {
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_login);
         context = this;
 

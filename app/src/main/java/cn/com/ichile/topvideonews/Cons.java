@@ -21,6 +21,7 @@ public class Cons {
     public static final String TV = "/ok2.json";
     public static final String RECOMMEND = "/ok3.json";
     public static final String BASE = "http://test.biedese.cn/VideoNews";
+
     public static String HOT_URL = BASE + HOT;
 
     public static String TV_URL = BASE + TV;

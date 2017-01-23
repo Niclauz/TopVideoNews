@@ -14,7 +14,7 @@ import cn.com.ichile.topvideonews.R;
 import cn.com.ichile.topvideonews.activity.MainActivity;
 import cn.com.ichile.topvideonews.adapter.VideoListAdapter;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
-import cn.com.ichile.topvideonews.net.NetUtil;
+import cn.com.ichile.topvideonews.net.DataUtil;
 import cn.com.ichile.topvideonews.widget.MediaHelp;
 import cn.com.ichile.topvideonews.widget.VideoSuperPlayer;
 
@@ -43,10 +43,6 @@ public class HotFragment extends BaseFragment {
         return view;
     }
 
-    @Override
-    public String setDataType() {
-        return Cons.HOT;
-    }
 
     @Override
     public OnNetDataCallback getItemAdapter() {
@@ -68,7 +64,7 @@ public class HotFragment extends BaseFragment {
         if (!isVisiable || !isPrepared) {
             return;
         }
-        NetUtil.getVideoList(Cons.HOT,mAdapter);
+        DataUtil.getVideoList(Cons.HOT,mAdapter);
     }
 
     @Override

@@ -1,20 +1,25 @@
 package cn.com.ichile.topvideonews.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,17 +31,14 @@ import java.util.List;
 import cn.com.ichile.topvideonews.Cons;
 import cn.com.ichile.topvideonews.R;
 import cn.com.ichile.topvideonews.adapter.FragmentAdapter;
+import cn.com.ichile.topvideonews.callback.OnFragmentBind;
 import cn.com.ichile.topvideonews.db.OriginalDao;
-import cn.com.ichile.topvideonews.domain.VideoBean;
-import cn.com.ichile.topvideonews.fragment.BaseFragment;
-import cn.com.ichile.topvideonews.fragment.HotFragment;
 import cn.com.ichile.topvideonews.fragment.RecommendFragment;
-import cn.com.ichile.topvideonews.fragment.TvFragment;
+import cn.com.ichile.topvideonews.net.DataUtil;
 import cn.com.ichile.topvideonews.util.UiUtil;
 import cn.com.ichile.topvideonews.widget.MediaHelp;
 import cn.com.ichile.topvideonews.widget.RoundImageView;
 import cn.sharesdk.login.UserInfo;
-import cn.sharesdk.onekeyshare.ShareTool;
 
 /**
  * FBI WARNING ! MAGIC ! DO NOT TOUGH !
@@ -46,17 +48,20 @@ public class MainActivity extends BaseActivity
         implements OnNavigationItemSelectedListener {
 
 
+    private static final int INIT_SDK = 1;
+    private static final int AFTER_LIKE = 2;
     public OriginalDao mDao;
     private ViewPager mViewPager;
     private ViewPager.OnPageChangeListener mOnPageChangeListener;
     private List<String> mPageTypeList;
     private int lastPosition;
     private FragmentAdapter mFragmentAdapter;
-    private List<VideoBean> list;
-    private BaseFragment mFragment;
+    private RecommendFragment mFragment;
+    private RecyclerView mRecycleView;
     private TextView mNavHeadName;
     private TextView mNavHeadDesc;
     private RoundImageView mNavHeadIma;
+    private Context context;
 
 
     @Override
@@ -64,20 +69,17 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        context = this;
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                // refresh();
+        initFab();
 
-                ShareTool shareTool = new ShareTool(MainActivity.this);
-                shareTool.showShare("title", "http://www.mob.com", "share share", null, "http://www.mob.com");
-            }
-        });
+        initNavigationBar(toolbar);
 
+        initViewPager();
+
+    }
+
+    private void initNavigationBar(Toolbar toolbar) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -97,33 +99,65 @@ public class MainActivity extends BaseActivity
                 startActivityForResult(i, Cons.LOGIN_RESULT);
             }
         });
+    }
 
+    private void initFab() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mRecycleView != null) {
+                    mRecycleView.scrollToPosition(0);
+                    Snackbar snackbar = Snackbar.make(view, "已滚动到顶部，下拉刷新!", Snackbar.LENGTH_SHORT)
+                                                .setAction("确定", new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+
+                                                    }
+                                                });
+                    snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorActionBar));
+                    View snackbarView = snackbar.getView();
+                    TextView tv = (TextView) snackbarView.findViewById(R.id.snackbar_text);
+                    Button button = (Button) snackbarView.findViewById(R.id.snackbar_action);
+                    tv.setGravity(Gravity.CENTER);
+                    tv.setTextSize(18);
+                    button.setTextColor(getResources().getColor(R.color.colorWhite));
+                    snackbar.show();
+                }
+            }
+        });
+    }
+
+
+    private void initViewPager() {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tl_top);
         mViewPager = (ViewPager) findViewById(R.id.vp_main);
 
-        mDao = new OriginalDao(getApplicationContext(), null);
-        List<Fragment> fragmentList = new ArrayList<>();
-        List<String> titleList = new ArrayList<>();
+        //mDao = new OriginalDao(getApplicationContext(), null);
+
         mPageTypeList = new ArrayList();
 
         mPageTypeList.add(0, Cons.RECOMMEND);
         mPageTypeList.add(1, Cons.HOT);
         mPageTypeList.add(2, Cons.TV);
 
-        titleList.add(0, "推荐");
-        titleList.add(1, "焦点");
-        titleList.add(2, "卫视");
+        //List<String> titleList = new ArrayList<>();
+//        titleList.add(0, "推荐");
+//        titleList.add(1, "焦点");
+//        titleList.add(2, "卫视");
 
-        RecommendFragment recommendFragment = new RecommendFragment();
-        HotFragment hotFragment = new HotFragment();
-        TvFragment tvFragment = new TvFragment();
 
-        fragmentList.add(0, recommendFragment);
-        fragmentList.add(1, hotFragment);
-        fragmentList.add(2, tvFragment);
+        mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), tabLayout,new OnFragmentBind() {
 
-        mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragmentList, titleList);
-        mViewPager.setOffscreenPageLimit(3);
+            @Override
+            public void onBind(Fragment fragment) {
+                mFragment = (RecommendFragment) fragment;
+                mRecycleView = mFragment.getRecycleView();
+            }
+        });
+        //***********获取tab列表
+        DataUtil.getTabList(mFragmentAdapter);
+        mViewPager.setOffscreenPageLimit(5);
         mViewPager.setAdapter(mFragmentAdapter);
         tabLayout.setupWithViewPager(mViewPager);
 
@@ -135,6 +169,8 @@ public class MainActivity extends BaseActivity
 
             @Override
             public void onPageSelected(int position) {
+                mFragment = (RecommendFragment) mFragmentAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
+                mRecycleView = mFragment.getRecycleView();
 //                if (position == 0) {
 //                    mFragment = (RecommendFragment) mFragmentAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
 //                }else if(position == 1) {
@@ -144,10 +180,10 @@ public class MainActivity extends BaseActivity
 //                }
 //                if (position == 0) {
 //                    RecommendRecyAdapter videoListAdapter = (RecommendRecyAdapter) mFragment.getItemAdapter();
-//                    NetUtil.getVideoList(mPageTypeList.get(position),videoListAdapter);
+//                    DataUtil.getVideoList(mPageTypeList.get(position),videoListAdapter);
 //                }else{
 //                    VideoListAdapter videoListAdapter = (VideoListAdapter) mFragment.getItemAdapter();
-//                    NetUtil.getVideoList(mPageTypeList.get(position),videoListAdapter);
+//                    DataUtil.getVideoList(mPageTypeList.get(position),videoListAdapter);
 //                }
 
                 Toast.makeText(getApplicationContext(), "position-" + position, Toast.LENGTH_SHORT).show();
@@ -159,8 +195,8 @@ public class MainActivity extends BaseActivity
 
             }
         };
-        ViewPager.OnPageChangeListener onPageChangeListener = mOnPageChangeListener;
-        mViewPager.addOnPageChangeListener(onPageChangeListener);
+        mViewPager.addOnPageChangeListener(mOnPageChangeListener);
+
     }
 
 
@@ -250,7 +286,7 @@ public class MainActivity extends BaseActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-            UiUtil.startActivity(MainActivity.this,SocialActivity.class);
+            UiUtil.startActivity(MainActivity.this, SocialActivity.class);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {

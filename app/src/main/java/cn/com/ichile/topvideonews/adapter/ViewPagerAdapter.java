@@ -8,17 +8,19 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
+
 /**
  * FBI WARNING ! MAGIC ! DO NOT TOUGH !
  * Created by WangZQ on 2016/12/28 - 21:08.
  */
 
-public class ViewAdapter extends PagerAdapter {
+public class ViewPagerAdapter extends PagerAdapter implements OnNetDataCallback{
     private Context mContext;
     private List<View> mViewList;
     private List<String> mTitleList;
 
-    public ViewAdapter(Context context, List<View> viewList, List<String> titleList) {
+    public ViewPagerAdapter(Context context, List<View> viewList, List<String> titleList) {
         this.mContext = context;
         this.mViewList = viewList;
         this.mTitleList = titleList;
@@ -56,5 +58,25 @@ public class ViewAdapter extends PagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return mTitleList.get(position);
+    }
+
+    @Override
+    public void onSuccess(Object... data) {
+
+    }
+
+    @Override
+    public void onMore(Object... data) {
+
+    }
+
+    @Override
+    public void onError(Object... error) {
+
+    }
+
+    @Override
+    public void onProgress(int progress) {
+
     }
 }

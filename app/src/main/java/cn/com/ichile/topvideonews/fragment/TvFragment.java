@@ -14,7 +14,7 @@ import cn.com.ichile.topvideonews.R;
 import cn.com.ichile.topvideonews.activity.MainActivity;
 import cn.com.ichile.topvideonews.adapter.VideoListAdapter;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
-import cn.com.ichile.topvideonews.net.NetUtil;
+import cn.com.ichile.topvideonews.net.DataUtil;
 import cn.com.ichile.topvideonews.widget.MediaHelp;
 import cn.com.ichile.topvideonews.widget.VideoSuperPlayer;
 
@@ -52,7 +52,7 @@ public class TvFragment extends BaseFragment {
         if (!isPrepared || !isVisiable) {
             return;
         }
-        NetUtil.getVideoList(Cons.TV, mAdapter);
+        DataUtil.getVideoList(Cons.TV, mAdapter);
     }
 
     @Override
@@ -120,10 +120,6 @@ public class TvFragment extends BaseFragment {
         MediaHelp.release();
     }
 
-    @Override
-    public String setDataType() {
-        return Cons.TV;
-    }
 
     @Override
     public OnNetDataCallback getItemAdapter() {

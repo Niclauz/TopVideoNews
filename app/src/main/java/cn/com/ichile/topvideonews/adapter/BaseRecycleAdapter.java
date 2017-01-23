@@ -19,6 +19,9 @@ public class BaseRecycleAdapter<T> extends RecyclerView.Adapter implements BaseA
 
     protected List<T> mDataList;
 
+    protected static final int ITEM = 0;
+    protected static final int FOOTER = 1;
+
     BaseRecycleAdapter(List<T> list) {
         if (mDataList == null) {
             mDataList = new ArrayList<>();
@@ -52,6 +55,13 @@ public class BaseRecycleAdapter<T> extends RecyclerView.Adapter implements BaseA
     public void add(int position, T item) {
         mDataList.add(position, item);
         notifyItemInserted(position);
+    }
+
+    public void addAll(List<T> list) {
+        mDataList.clear();
+        mDataList.addAll(list);
+        notifyDataSetChanged();
+        //notifyItemRangeInserted(0,mDataList.size());
     }
 
     public void addMore(List<T> list) {

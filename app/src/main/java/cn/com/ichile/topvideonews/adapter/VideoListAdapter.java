@@ -84,6 +84,11 @@ public class VideoListAdapter extends BaseAdapter implements OnNetDataCallback {
     }
 
     @Override
+    public void onMore(Object... data) {
+
+    }
+
+    @Override
     public void onError(Object... error) {
 
     }
