@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import cn.com.ichile.topvideonews.R;
+import cn.com.ichile.topvideonews.activity.MainActivity;
 import cn.com.ichile.topvideonews.adapter.RecommendRecyAdapter;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
 import cn.com.ichile.topvideonews.net.DataUtil;
@@ -64,6 +65,7 @@ public class RecommendFragment extends BaseFragment {
         DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionName);
     }
 
+    long startId = 1;
 
     private void initRecycleView(View view) {
         mRecycleView = (RecyclerView) view.findViewById(R.id.rv_recommend);
@@ -83,8 +85,9 @@ public class RecommendFragment extends BaseFragment {
                         && mLastVisibleItemPosition + 1 == mRecommendRecyAdapter.getItemCount()) {
                     //***************load more
                     int size = mRecommendRecyAdapter.getData().size();
-                    long startId = size <= 1 ? 0 : mRecommendRecyAdapter.getData().get(mRecommendRecyAdapter.getData().size() - 1).getMainContent().getId();
-                    DataUtil.getMoreSectionList(mRecommendRecyAdapter, productCode, sectionName, startId);
+                    //long startId = size <= 1 ? 0 : mRecommendRecyAdapter.getData().get(mRecommendRecyAdapter.getData().size() - 1).getMainContent().getId();
+
+                    DataUtil.getMoreSectionList(mRecommendRecyAdapter, productCode, sectionName, ++startId);
                 }
             }
 
@@ -96,7 +99,6 @@ public class RecommendFragment extends BaseFragment {
         });
 
         mRecycleView.setAdapter(mRecommendRecyAdapter);
-        mRecommendRecyAdapter.notifyDataSetChanged();
     }
 
     private void initSwipeRef(final View view) {
@@ -116,7 +118,7 @@ public class RecommendFragment extends BaseFragment {
                 button.setTextColor(getResources().getColor(R.color.colorWhite));
                 snackbar.show();
 
-                DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionName);
+               // DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionName);
             }
         });
     }
@@ -130,10 +132,13 @@ public class RecommendFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        MainActivity mainActivity = (MainActivity) getActivity();
         //初始化首页数据
         //DataUtil.getVideoList(Cons.RECOMMEND, mRecommendRecyAdapter);
 
-        DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionName);
+        if (mainActivity.getPagerPosition() == 0) {
+            DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionName);
+        }
 
         onScrollListener = new RecyclerView.OnScrollListener() {
             private int mLastVisibleItemPosition;

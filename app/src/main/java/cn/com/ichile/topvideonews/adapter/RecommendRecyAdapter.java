@@ -199,19 +199,12 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
 
         holder.mTv_item_author.setText(mContentMain.getSrcSite());
         holder.mTv_item_title.setText(mContentMain.getTitle1());
-        try {
-            Picasso.with(App.getAppContext())
-                    .load(mContentMain.getImage1())
-                    .fit()
-                    .placeholder(R.drawable.bg)
-                    .into(holder.mIv_video_pre);
-        } catch (Exception e) {
-            Picasso.with(App.getAppContext())
-                    .load(R.drawable.bg)
-                    .fit()
-                    .placeholder(R.drawable.bg)
-                    .into(holder.mIv_video_pre);
-        }
+        Picasso.with(App.getAppContext())
+                .load(mContentMain.getImage1())
+                .fit()
+                .placeholder(R.drawable.bg)
+                .error(R.drawable.bg)
+                .into(holder.mIv_video_pre);
         if (indexPosition == position && isPlaying()) {
             holder.mVideoSuperPlayer.setVisibility(View.VISIBLE);
         } else {

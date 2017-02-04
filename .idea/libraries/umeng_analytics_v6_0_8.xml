@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="umeng-analytics-v6.0.8">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/PushSDK/libs/umeng-analytics-v6.0.8.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

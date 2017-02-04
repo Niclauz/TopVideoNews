@@ -107,14 +107,14 @@ public class MainActivity extends BaseActivity
             @Override
             public void onClick(View view) {
                 if (mRecycleView != null) {
-                    mRecycleView.scrollToPosition(0);
+                    mRecycleView.smoothScrollToPosition(0);
                     Snackbar snackbar = Snackbar.make(view, "已滚动到顶部，下拉刷新!", Snackbar.LENGTH_SHORT)
-                                                .setAction("确定", new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View v) {
+                            .setAction("确定", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 
-                                                    }
-                                                });
+                                }
+                            });
                     snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorActionBar));
                     View snackbarView = snackbar.getView();
                     TextView tv = (TextView) snackbarView.findViewById(R.id.snackbar_text);
@@ -129,6 +129,14 @@ public class MainActivity extends BaseActivity
     }
 
 
+    public ViewPager getViewPager() {
+        return mViewPager;
+    }
+
+    private int currPagerPosition;
+    public int getPagerPosition() {
+        return currPagerPosition;
+    }
     private void initViewPager() {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tl_top);
         mViewPager = (ViewPager) findViewById(R.id.vp_main);
@@ -147,7 +155,7 @@ public class MainActivity extends BaseActivity
 //        titleList.add(2, "卫视");
 
 
-        mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), tabLayout,new OnFragmentBind() {
+        mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), tabLayout, new OnFragmentBind() {
 
             @Override
             public void onBind(Fragment fragment) {
@@ -169,6 +177,7 @@ public class MainActivity extends BaseActivity
 
             @Override
             public void onPageSelected(int position) {
+                currPagerPosition = position;
                 mFragment = (RecommendFragment) mFragmentAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
                 mRecycleView = mFragment.getRecycleView();
 //                if (position == 0) {

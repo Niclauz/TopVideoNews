@@ -26,8 +26,8 @@ public class BaseRecycleAdapter<T> extends RecyclerView.Adapter implements BaseA
         if (mDataList == null) {
             mDataList = new ArrayList<>();
         }
-        if (list != null)
-            mDataList.addAll(list);
+//        if (list != null)
+//            mDataList.addAll(list);
     }
 
     @Override
