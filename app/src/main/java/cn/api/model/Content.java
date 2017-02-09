@@ -4,9 +4,9 @@ import java.util.List;
 
 public class Content
 {
-	private String				composeType=""; //区分是否为主内容  onlyMain,onlySub
-	private ContentMain 		mainContent=null; //主内容 
-	private List<ContentSub> 	subContentList=null;//子内容
+	private String				composeType=""; 
+	private ContentMain 		mainContent=null;
+	private List<ContentSub> 	subContentList=null;
 	public String getComposeType()
 	{
 		return composeType;

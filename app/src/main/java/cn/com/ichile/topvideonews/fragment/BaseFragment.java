@@ -18,6 +18,7 @@ import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
 public abstract class BaseFragment extends Fragment {
     protected String sectionName;
     protected String productCode;
+    protected int sectionId;
     //当页面可见时数据加载
     protected boolean isVisiable;
 
@@ -27,6 +28,7 @@ public abstract class BaseFragment extends Fragment {
         if (section != null)
             sectionName = section.getName();
         productCode = section.getProductCode();
+        sectionId = section.getSectionId();
         super.setArguments(args);
     }
 

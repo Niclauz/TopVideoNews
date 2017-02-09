@@ -16,4 +16,6 @@
     <dimen name="media_controller_view_height">@dimen/base48dp</dimen>
     <dimen name="media_controller_button_height">@dimen/base52dp</dimen>
     <dimen name="media_controller_button_width">@dimen/base71dp</dimen>
+
+    <dimen name="app_tool_bar_height">@dimen/base50dp</dimen>
 </resources>

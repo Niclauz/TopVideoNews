@@ -5,7 +5,14 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+    <include
+        android:id="@+id/app_bar_login"
+        layout="@layout/app_bar_common"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_tool_bar_height"/>
+
     <cn.com.ichile.topvideonews.widget.RoundImageView
+        android:layout_below="@id/app_bar_login"
         android:id="@+id/riv_login_avatar"
         android:layout_width="@dimen/base100dp"
         android:layout_height="@dimen/base100dp"

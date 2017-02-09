@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="cn.com.ichile.topvideonews"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="cn.com.ichile.topvideonews">
 
 
     <uses-permission android:name="android.permission.GET_TASKS"/>
@@ -46,7 +46,33 @@
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.SocialActivity"></activity>
+        <activity
+            android:name=".activity.SocialActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".activity.AboutActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".activity.CollectionActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".activity.FeedbackActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".activity.HistoryActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".activity.MoreAvtivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:screenOrientation="portrait"></activity>
 
 
         <!--微信分享回调 -->

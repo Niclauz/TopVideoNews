@@ -5,7 +5,11 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorActionBar</item>
 
+        <item name="colorPrimaryDark">@color/colorActionBarDark</item>
+
         <item name="colorAccent">@color/colorActionBar</item>
+        
+        <!--<item name="toolbarNavigationButtonStyle">@style/myNavigationStyle</item>-->
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -22,5 +26,13 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="myNavigationStyle" parent="Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="android:minWidth">0dp</item>
+        <!--<item name="android:padding">0dp</item>-->
+        <!--<item name="android:layout_width">@dimen/base36dp</item>-->
+        <!--<item name="android:layout_height">@dimen/base36dp</item>-->
+        <item name="android:scaleType">centerInside</item>
+    </style>
 
 </resources>

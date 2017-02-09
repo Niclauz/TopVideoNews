@@ -2,8 +2,8 @@ package cn.api.model;
 
 public class ContentSub extends ContentBase
 {
-	private int		mainId=0;//主内容id
-	private int		subSeq=0;//子集序列 第？集
+	private int		mainId=0;
+	private int		subSeq=0;
 	public int getMainId()
 	{
 		return mainId;

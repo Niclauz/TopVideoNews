@@ -3,24 +3,21 @@ package cn.com.ichile.topvideonews.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import cn.com.ichile.topvideonews.R;
 import cn.com.ichile.topvideonews.activity.MainActivity;
 import cn.com.ichile.topvideonews.adapter.RecommendRecyAdapter;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
 import cn.com.ichile.topvideonews.net.DataUtil;
+import cn.com.ichile.topvideonews.util.UiUtil;
 import cn.com.ichile.topvideonews.widget.VideoSuperPlayer;
 
 /**
@@ -62,7 +59,7 @@ public class RecommendFragment extends BaseFragment {
         }
         //设置数据
         // DataUtil.getVideoList(Cons.RECOMMEND, mRecommendRecyAdapter);
-        DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionName);
+        DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionId);
     }
 
     long startId = 1;
@@ -74,7 +71,7 @@ public class RecommendFragment extends BaseFragment {
         mRecycleView.setLayoutManager(layoutManager);
         mRecycleView.setItemAnimator(new DefaultItemAnimator());
 //        mRecycleView.addItemDecoration(new );
-        mRecommendRecyAdapter = new RecommendRecyAdapter(getActivity(), null,mSwipeRef);
+        mRecommendRecyAdapter = new RecommendRecyAdapter(getActivity(), null, mSwipeRef);
         mRecycleView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             private int mLastVisibleItemPosition;
 
@@ -87,7 +84,7 @@ public class RecommendFragment extends BaseFragment {
                     int size = mRecommendRecyAdapter.getData().size();
                     //long startId = size <= 1 ? 0 : mRecommendRecyAdapter.getData().get(mRecommendRecyAdapter.getData().size() - 1).getMainContent().getId();
 
-                    DataUtil.getMoreSectionList(mRecommendRecyAdapter, productCode, sectionName, ++startId);
+                    DataUtil.getMoreSectionList(mRecommendRecyAdapter, productCode, sectionId, ++startId);
                 }
             }
 
@@ -107,18 +104,20 @@ public class RecommendFragment extends BaseFragment {
         mSwipeRef.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Snackbar snackbar = Snackbar.make(view, "刷新", Snackbar.LENGTH_SHORT)
-                        .setAction("确定", null);
-                snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorActionBar));
-                View snackbarView = snackbar.getView();
-                TextView tv = (TextView) snackbarView.findViewById(R.id.snackbar_text);
-                Button button = (Button) snackbarView.findViewById(R.id.snackbar_action);
-                tv.setGravity(Gravity.CENTER);
-                tv.setTextSize(18);
-                button.setTextColor(getResources().getColor(R.color.colorWhite));
-                snackbar.show();
+//                Snackbar snackbar = Snackbar.make(view, "已刷新", Snackbar.LENGTH_SHORT)
+//                        .setAction("确定", null);
+//                snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorActionBar));
+//                View snackbarView = snackbar.getView();
+//                TextView tv = (TextView) snackbarView.findViewById(R.id.snackbar_text);
+//                Button button = (Button) snackbarView.findViewById(R.id.snackbar_action);
+//                tv.setGravity(Gravity.CENTER);
+//                tv.setTextSize(18);
+//                button.setTextColor(getResources().getColor(R.color.colorWhite));
+//                snackbar.show();
 
-               // DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionName);
+
+                UiUtil.showSimpleSnackbar(getContext(),view,"已刷新","确定",null);
+                DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionId);
             }
         });
     }
@@ -133,11 +132,11 @@ public class RecommendFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         MainActivity mainActivity = (MainActivity) getActivity();
-        //初始化首页数据
-        //DataUtil.getVideoList(Cons.RECOMMEND, mRecommendRecyAdapter);
 
+        //初始化首页数据
         if (mainActivity.getPagerPosition() == 0) {
-            DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionName);
+            //DataUtil.getVideoList(Cons.RECOMMEND, mRecommendRecyAdapter);
+            DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionId);
         }
 
         onScrollListener = new RecyclerView.OnScrollListener() {
@@ -150,9 +149,9 @@ public class RecommendFragment extends BaseFragment {
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     RecommendRecyAdapter adapter = (RecommendRecyAdapter) mRecycleView.getAdapter();
-                    VideoSuperPlayer videoSuperPlayer = adapter.getVideoSuperPlayer();
                     int indexPosition = adapter.getIndexPosition();
-                    boolean playing = adapter.isPlaying();
+//                    VideoSuperPlayer videoSuperPlayer = adapter.getVideoSuperPlayer();
+//                    boolean playing = adapter.isPlaying();
                     if ((indexPosition < mFirstVisibleItemPosition
                             || indexPosition > mLastVisibleItemPosition)
                             ) {
@@ -172,8 +171,6 @@ public class RecommendFragment extends BaseFragment {
                             videoPlayCallback.onCloseVideo();
                             currPlayPlayer.setVisibility(View.GONE);
                         }
-
-
                     }
                 }
 
@@ -192,6 +189,34 @@ public class RecommendFragment extends BaseFragment {
         };
         mRecycleView.addOnScrollListener(onScrollListener);
 
+    }
+
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        RecommendRecyAdapter adapter = (RecommendRecyAdapter) mRecycleView.getAdapter();
+////        VideoSuperPlayer videoSuperPlayer = adapter.getVideoSuperPlayer();
+////        int indexPosition = adapter.getIndexPosition();
+////        boolean playing = adapter.isPlaying();
+//        VideoSuperPlayer currPlayPlayer = adapter.getCurrPlayPlayer();
+//        if (currPlayPlayer != null) {
+//            VideoSuperPlayer.VideoPlayCallbackInterface videoPlayCallback = currPlayPlayer.getVideoPlayCallback();
+//            videoPlayCallback.onCloseVideo();
+//            currPlayPlayer.setVisibility(View.GONE);
+//        }
+//    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        RecommendRecyAdapter adapter = (RecommendRecyAdapter) mRecycleView.getAdapter();
+        VideoSuperPlayer currPlayPlayer = adapter.getCurrPlayPlayer();
+        if (currPlayPlayer != null) {
+            VideoSuperPlayer.VideoPlayCallbackInterface videoPlayCallback = currPlayPlayer.getVideoPlayCallback();
+            videoPlayCallback.onCloseVideo();
+            currPlayPlayer.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -3,7 +3,7 @@ package cn.api.message;
 public class SectionWithContentQueryRequest extends SectionQueryRequest
 {
 //	private int						startId=0;
-	private int						pageSize=0;//专区内容查询数量
+	private int						pageSize=0;
 	
 //	public int getStartId() {
 //		return startId;
@@ -12,10 +12,12 @@ public class SectionWithContentQueryRequest extends SectionQueryRequest
 //		this.startId = startId;
 //	}
 	
-	public int getPageSize() {
+	public int getPageSize() 
+	{
 		return pageSize;
 	}
-	public void setPageSize(int pageSize) {
+	public void setPageSize(int pageSize) 
+	{
 		this.pageSize = pageSize;
 	}
 }

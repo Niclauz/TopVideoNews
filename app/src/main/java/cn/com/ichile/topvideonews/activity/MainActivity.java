@@ -31,6 +31,7 @@ import java.util.List;
 import cn.com.ichile.topvideonews.Cons;
 import cn.com.ichile.topvideonews.R;
 import cn.com.ichile.topvideonews.adapter.FragmentAdapter;
+import cn.com.ichile.topvideonews.adapter.RecommendRecyAdapter;
 import cn.com.ichile.topvideonews.callback.OnFragmentBind;
 import cn.com.ichile.topvideonews.db.OriginalDao;
 import cn.com.ichile.topvideonews.fragment.RecommendFragment;
@@ -38,6 +39,7 @@ import cn.com.ichile.topvideonews.net.DataUtil;
 import cn.com.ichile.topvideonews.util.UiUtil;
 import cn.com.ichile.topvideonews.widget.MediaHelp;
 import cn.com.ichile.topvideonews.widget.RoundImageView;
+import cn.com.ichile.topvideonews.widget.VideoSuperPlayer;
 import cn.sharesdk.login.UserInfo;
 
 /**
@@ -77,6 +79,16 @@ public class MainActivity extends BaseActivity
 
         initViewPager();
 
+    }
+
+    @Override
+    public boolean hasToolBar() {
+        return false;
+    }
+
+    @Override
+    public String setToolBarTitile() {
+        return null;
     }
 
     private void initNavigationBar(Toolbar toolbar) {
@@ -134,9 +146,11 @@ public class MainActivity extends BaseActivity
     }
 
     private int currPagerPosition;
+
     public int getPagerPosition() {
         return currPagerPosition;
     }
+
     private void initViewPager() {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tl_top);
         mViewPager = (ViewPager) findViewById(R.id.vp_main);
@@ -149,23 +163,20 @@ public class MainActivity extends BaseActivity
         mPageTypeList.add(1, Cons.HOT);
         mPageTypeList.add(2, Cons.TV);
 
-        //List<String> titleList = new ArrayList<>();
-//        titleList.add(0, "推荐");
-//        titleList.add(1, "焦点");
-//        titleList.add(2, "卫视");
-
 
         mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), tabLayout, new OnFragmentBind() {
 
             @Override
             public void onBind(Fragment fragment) {
-                mFragment = (RecommendFragment) fragment;
-                mRecycleView = mFragment.getRecycleView();
+                if (fragment != null) {
+                    mFragment = (RecommendFragment) fragment;
+                    mRecycleView = mFragment.getRecycleView();
+                }
             }
         });
         //***********获取tab列表
         DataUtil.getTabList(mFragmentAdapter);
-        mViewPager.setOffscreenPageLimit(5);
+        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mFragmentAdapter);
         tabLayout.setupWithViewPager(mViewPager);
 
@@ -180,6 +191,12 @@ public class MainActivity extends BaseActivity
                 currPagerPosition = position;
                 mFragment = (RecommendFragment) mFragmentAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
                 mRecycleView = mFragment.getRecycleView();
+                RecommendRecyAdapter adapter = (RecommendRecyAdapter) mRecycleView.getAdapter();
+                VideoSuperPlayer currPlayPlayer = adapter.getCurrPlayPlayer();
+                if (currPlayPlayer != null) {
+                    currPlayPlayer.getVideoPlayCallback().onCloseVideo();
+                    currPlayPlayer.setVisibility(View.GONE);
+                }
 //                if (position == 0) {
 //                    mFragment = (RecommendFragment) mFragmentAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
 //                }else if(position == 1) {
@@ -293,19 +310,20 @@ public class MainActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-            UiUtil.startActivity(MainActivity.this, SocialActivity.class);
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
+        if (id == R.id.nav_collection) {
+            UiUtil.startActivity(MainActivity.this, CollectionActivity.class);
+        } else if (id == R.id.nav_history) {
+            UiUtil.startActivity(MainActivity.this, HistoryActivity.class);
+        } else if (id == R.id.nav_more) {
+            UiUtil.startActivity(MainActivity.this, MoreAvtivity.class);
+        } else if (id == R.id.nav_setting) {
+            UiUtil.startActivity(MainActivity.this, SettingsActivity.class);
         } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            //..........
+        } else if (id == R.id.nav_feedback) {
+            UiUtil.startActivity(MainActivity.this, FeedbackActivity.class);
+        } else if (id == R.id.nav_about) {
+            UiUtil.startActivity(MainActivity.this, AboutActivity.class);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

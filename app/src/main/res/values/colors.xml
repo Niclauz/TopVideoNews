@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="colorActionBar">#ffff0000</color>
+    <color name="colorActionBarDark">#ffd33232</color>
     <color name="colorNavHeader">#eeff0000</color>
     <color name="colorTabTopGray">#22000000</color>
     <color name="colorWhite">#fff</color>

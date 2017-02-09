@@ -147,18 +147,18 @@ public class DataUtil {
         }
     }
 
-    public static void getSectionList(OnNetDataCallback onNetDataCallback, String productCode, String sectionName) {
-        getMoreSectionList(onNetDataCallback, productCode, sectionName, 1);
+    public static void getSectionList(OnNetDataCallback onNetDataCallback, String productCode, int sectionId) {
+        getMoreSectionList(onNetDataCallback, productCode, sectionId, 1);
         Logger.i(TAG, "getSectionList---");
     }
 
 
-    public static void getMoreSectionList(OnNetDataCallback onNetDataCallback, String productCode, String sectionName, long startId) {
+    public static void getMoreSectionList(OnNetDataCallback onNetDataCallback, String productCode, int sectionId, long startId) {
         try {
             Logger.i(TAG, "getMoreSectionList---" + startId);
             ContentListOfSectionQueryRequest csqRequest = new ContentListOfSectionQueryRequest();
             csqRequest.setProductCode(productCode);
-            csqRequest.setSectionName(sectionName);
+            csqRequest.setSectionId(sectionId);
             csqRequest.setPageSize(10);
             csqRequest.setStartId(startId < 1 ? 1 : startId);
             boolean isMore = startId <= 1 ? false : true;

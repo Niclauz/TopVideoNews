@@ -1,9 +1,9 @@
 package cn.api.message;
 
+
 import java.util.List;
 
 import cn.api.model.SectionWithContent;
-
 
 public class SectionWithContentQueryResponse //extends SectionQueryResponse
 {

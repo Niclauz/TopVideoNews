@@ -29,7 +29,7 @@ public class SplashActivity extends BaseActivity {
                 case onData:
                     curTime = SystemClock.currentThreadTimeMillis();
                     mD = curTime - staTime;
-                    Log.i("ssssss","----" + mD);
+                    Log.i("ssssss", "----" + mD);
                     if (mD < 3500) {
                         new Thread() {
                             @Override
@@ -73,5 +73,15 @@ public class SplashActivity extends BaseActivity {
                 mHandler.sendMessage(message);
             }
         }.start();
+    }
+
+    @Override
+    public boolean hasToolBar() {
+        return false;
+    }
+
+    @Override
+    public String setToolBarTitile() {
+        return null;
     }
 }

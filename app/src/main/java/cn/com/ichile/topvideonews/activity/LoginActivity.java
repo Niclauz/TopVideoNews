@@ -55,6 +55,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         initPlatformList();
     }
 
+    @Override
+    public boolean hasToolBar() {
+        return false;
+    }
+
+    @Override
+    public String setToolBarTitile() {
+        return null;
+    }
+
     private void initPlatformList() {
         ShareSDK.initSDK(this);
         Platform[] Platformlist = ShareSDK.getPlatformList();

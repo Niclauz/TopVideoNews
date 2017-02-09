@@ -1,10 +1,10 @@
 package cn.api.message;
 
-//查询专区列表
+//��ѯר���б�
 public class SectionQueryRequest
 {
-	private String productCode="";//所属专区id
-	private String channelId="";//所属渠道id
+	private String productCode="";
+	private String channelId="";
 	
 	
 	public String getProductCode()

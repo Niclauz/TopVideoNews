@@ -31,6 +31,12 @@ public class Constants
 		public static int Short_Film=4;
 	}
 	
+	public static class TypeNum
+	{
+		public static int type1=1;
+		public static int type2=2;
+	}
+	
 	public static class Type1
 	{
 		
