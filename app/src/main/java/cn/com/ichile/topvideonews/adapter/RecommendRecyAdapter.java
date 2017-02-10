@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +27,8 @@ import cn.com.ichile.topvideonews.App;
 import cn.com.ichile.topvideonews.R;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
 import cn.com.ichile.topvideonews.util.Logger;
+import cn.com.ichile.topvideonews.util.StoreUtil;
+import cn.com.ichile.topvideonews.util.UiUtil;
 import cn.com.ichile.topvideonews.widget.ListVideoPlayCallback;
 import cn.com.ichile.topvideonews.widget.MediaHelp;
 import cn.com.ichile.topvideonews.widget.PlayStateCallback;
@@ -45,6 +46,7 @@ import cn.sharesdk.socialization.QuickCommentBar;
 import cn.sharesdk.socialization.Socialization;
 import cn.sharesdk.socialization.component.ReplyTooFrequentlyException;
 
+
 /**
  * FBI WARNING ! MAGIC ! DO NOT TOUGH !
  * Created by WangZQ on 2017/1/9 - 14:03.
@@ -58,7 +60,6 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
     private int indexPosition;
     private boolean isPlaying;
     private ContentMain mContentMain;
-    private VideoSuperPlayer mVideoSuperPlayer;
     private VideoSuperPlayer currPlayPlayer;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     //share sdk
@@ -74,6 +75,7 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
     private QuickCommentBar qcBar;
     private CommentFilter filter;
     private TextView mTv_footer_loading;
+    private ListVideoPlayCallback videoPlayCallback;
 
     public RecommendRecyAdapter(Activity activity, List list, SwipeRefreshLayout swipeRefreshLayout) {
         super(list);
@@ -81,9 +83,6 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
         this.mSwipeRefreshLayout = swipeRefreshLayout;
     }
 
-    public VideoSuperPlayer getVideoSuperPlayer() {
-        return mVideoSuperPlayer;
-    }
 
     public VideoSuperPlayer getCurrPlayPlayer() {
         return currPlayPlayer;
@@ -107,9 +106,15 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
         changeRefresh(false);
     }
 
-    private void changeRefresh(boolean isRefresh) {
+    private void changeRefresh(final boolean isRefresh) {
         if (mSwipeRefreshLayout != null) {
-            mSwipeRefreshLayout.setRefreshing(isRefresh);
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefreshLayout.setRefreshing(isRefresh);
+                }
+            });
+
         }
     }
 
@@ -194,7 +199,7 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
         }
 
         Log.i("hhhhh", "hhhhh----" + mContentMain.toString() + "");
-        mVideoSuperPlayer = holder.mVideoSuperPlayer;
+        currPlayPlayer = holder.mVideoSuperPlayer;
 
 
         holder.mTv_item_author.setText(mContentMain.getSrcSite());
@@ -205,7 +210,7 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
                 .placeholder(R.drawable.bg)
                 .error(R.drawable.bg)
                 .into(holder.mIv_video_pre);
-        if (indexPosition == position && isPlaying()) {
+        if (indexPosition == position && isPlaying) {
             holder.mVideoSuperPlayer.setVisibility(View.VISIBLE);
         } else {
             holder.mVideoSuperPlayer.setVisibility(View.GONE);
@@ -216,8 +221,9 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
         holder.mPlay_btn.setOnClickListener(new RecyOnClick(holder.mVideoSuperPlayer, holder.mPlay_btn, position));
 
         Logger.i(TAG, "CONTENT ID--" + mContentMain.getId());
-//        holder.mIb_item_like.setOnClickListener(this);
-//        holder.mIb_item_share.setOnClickListener(this);
+        holder.mIb_item_like.setOnClickListener(this);
+        holder.mIb_item_like.setTag(mContentMain);
+        holder.mIb_item_share.setOnClickListener(this);
     }
 
     private void initShareSdk() {
@@ -298,7 +304,6 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
                 Socialization service = ShareSDK.getService(Socialization.class);
                 //service.setCustomPlatform(new MyPlatform(this));
                 initOnekeyShare();
-                initQuickCommentBar();
                 break;
             case AFTER_LIKE:
                 if (msg.arg1 == 1) {
@@ -352,71 +357,45 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
     }
 
 
-    private void initQuickCommentBar() {
-        qcBar.setTopic(topicId, topicTitle, topicPublishTime, topicAuthor);
-        qcBar.setTextToShare(mActivity.getString(R.string.share_content));
-        qcBar.getBackButton().setOnClickListener(this);
-        qcBar.setAuthedAccountChangeable(false);
-
-        CommentFilter.Builder builder = new CommentFilter.Builder();
-        // 非空过滤器
-        builder.append(new CommentFilter.FilterItem() {
-            // 返回true表示是垃圾评论
-            public boolean onFilter(String comment) {
-                if (TextUtils.isEmpty(comment)) {
-                    return true;
-                } else if (comment.trim().length() <= 0) {
-                    return true;
-                } else if (comment.trim().toLowerCase().equals("null")) {
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public int getFilterCode() {
-                return 0;
-            }
-        });
-        // 字数上限过滤器
-        builder.append(new CommentFilter.FilterItem() {
-            // 返回true表示是垃圾评论
-            public boolean onFilter(String comment) {
-                if (comment != null) {
-                    String pureComment = comment.trim();
-                    String wordText = ResHelper.toWordText(pureComment, 140);
-                    if (wordText.length() != pureComment.length()) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public int getFilterCode() {
-                return 0;
-            }
-        });
-        filter = builder.build();
-        qcBar.setCommentFilter(filter);
-        qcBar.setOnekeyShare(oks);
-    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_item_like:
+                try {
+                    Logger.i(TAG,"ccccccccc");
+                    Object tag = v.getTag();
+                    ContentMain contentMain = null;
+                    if (tag != null && tag instanceof ContentMain) {
+                        contentMain  = (ContentMain) tag;
+                        if (contentMain != null) {
+                            StoreUtil.addCollection(App.getAppContext(),contentMain,contentMain.getId());
+                            UiUtil.showSimpleSnackbar(App.getAppContext(),v,"收藏成功" + contentMain.getId(),null,null);
+                        }
+                    }
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    UiUtil.showSimpleSnackbar(App.getAppContext(),v,"收藏失败，请稍后重试！",null,null);
+                }
                 break;
             case R.id.ib_item_share:
-                if (mContentMain != null) {
-                    ShareTool shareTool = new ShareTool(App.getAppContext());
-                    shareTool.showShare(mContentMain.getSrcSite(), null, mContentMain.getTitle1(), mContentMain.getImage1(), mContentMain.getPlayStreaming());
+                Object tag = v.getTag();
+                ContentMain contentMain = null;
+                if (tag != null && tag instanceof ContentMain) {
+                    contentMain  = (ContentMain) tag;
+                    if (contentMain != null) {
+                        ShareTool shareTool = new ShareTool(App.getAppContext());
+                        shareTool.showShare(contentMain.getSrcSite(), null, contentMain.getTitle1(), contentMain.getImage1(), contentMain.getPlayStreaming());
+                    }
                 }
+
             default:
                 break;
         }
+
     }
+
 
     class RecyOnClick implements View.OnClickListener {
         VideoSuperPlayer cVideoSuperPlayer;
@@ -446,7 +425,7 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
             }
             cVideoSuperPlayer.setVisibility(View.VISIBLE);
             cVideoSuperPlayer.loadAndPlay(MediaHelp.getInstance(), mContentMain.getPlayStreaming(), 0, false);
-            cVideoSuperPlayer.setVideoPlayCallback(new ListVideoPlayCallback(mActivity, cVideoSuperPlayer, mBtnPlay, mContentMain, new PlayStateCallback() {
+            videoPlayCallback = new ListVideoPlayCallback(mActivity, cVideoSuperPlayer, mBtnPlay, mContentMain, new PlayStateCallback() {
                 @Override
                 public void onIndexPosition(int p) {
                     indexPosition = p;
@@ -456,7 +435,8 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
                 public void onPlayState(boolean p) {
                     isPlaying = p;
                 }
-            }));
+            });
+            cVideoSuperPlayer.setVideoPlayCallback(videoPlayCallback);
 
             notifyDataSetChanged();
         }

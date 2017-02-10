@@ -87,7 +87,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public String setToolBarTitile() {
+    public String setToolBarTitle() {
         return null;
     }
 
@@ -194,7 +194,10 @@ public class MainActivity extends BaseActivity
                 RecommendRecyAdapter adapter = (RecommendRecyAdapter) mRecycleView.getAdapter();
                 VideoSuperPlayer currPlayPlayer = adapter.getCurrPlayPlayer();
                 if (currPlayPlayer != null) {
-                    currPlayPlayer.getVideoPlayCallback().onCloseVideo();
+//                    VideoSuperPlayer.VideoPlayCallbackInterface videoPlayCallback = currPlayPlayer.getVideoPlayCallback();
+//                    if (videoPlayCallback != null) {
+//                        videoPlayCallback.onCloseVideo();
+//                    }
                     currPlayPlayer.setVisibility(View.GONE);
                 }
 //                if (position == 0) {

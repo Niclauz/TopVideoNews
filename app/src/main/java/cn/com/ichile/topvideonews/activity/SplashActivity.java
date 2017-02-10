@@ -81,7 +81,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
-    public String setToolBarTitile() {
+    public String setToolBarTitle() {
         return null;
     }
 }

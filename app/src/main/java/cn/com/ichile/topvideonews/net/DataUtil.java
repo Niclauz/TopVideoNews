@@ -22,6 +22,9 @@ import java.util.concurrent.TimeUnit;
 import cn.api.Sdk;
 import cn.api.message.ContentListOfSectionQueryRequest;
 import cn.api.message.ContentListOfSectionQueryResponse;
+import cn.api.message.ContentListPreciseQueryRequest;
+import cn.api.message.ContentListPreciseQueryResponse;
+import cn.api.message.ContentPreciseQueryRequest;
 import cn.api.message.SectionQueryRequest;
 import cn.api.message.SectionQueryResponse;
 import cn.com.ichile.topvideonews.App;
@@ -75,30 +78,32 @@ public class DataUtil {
 
     private static boolean isLoading = false;
 
-    public static <T> void doPost(String url, Object object, final Class<T> clazz, final boolean isMore, final OnNetDataCallback onNetDataCallback) throws Exception {
+    public static <T> void doPost(String url, Object object, final Class<T> clazz, final boolean isMore, final OnNetDataCallback onNetDataCallback) {
+        try {
 
-        if (!isLoading) {
-            isLoading = true;
-            OkHttpClient okHttpClient = initHttpClinet();
-            String json = new Gson().toJson(object);
-            final Request request = new Request.Builder()
-                    .url(url)
-                    .post(RequestBody.create(MEDIA_JSON, json))
-                    .build();
 
-            okHttpClient.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    onNetDataCallback.onError(e);
-                    isLoading = false;
-                }
+            if (!isLoading) {
+                isLoading = true;
+                OkHttpClient okHttpClient = initHttpClinet();
+                String json = new Gson().toJson(object);
+                final Request request = new Request.Builder()
+                        .url(url)
+                        .post(RequestBody.create(MEDIA_JSON, json))
+                        .build();
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    isLoading = false;
-                    if (response.isSuccessful()) {
-                        Logger.i(TAG, "******" + response.body().toString());
-                        final T resp = new Gson().fromJson(response.body().charStream(), clazz);
+                okHttpClient.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        onNetDataCallback.onError(e);
+                        isLoading = false;
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        isLoading = false;
+                        if (response.isSuccessful()) {
+                            Logger.i(TAG, "******" + response.body().toString());
+                            final T resp = new Gson().fromJson(response.body().charStream(), clazz);
 //                    if (resp instanceof SectionQueryResponse) {
 //                        SectionQueryResponse sectionQueryResponse = (SectionQueryResponse) resp;
 //                    }else if(resp instanceof ContentListOfSectionQueryResponse) {
@@ -106,29 +111,32 @@ public class DataUtil {
 //                    }else if(resp instanceof SectionWithContentQueryResponse) {
 //                        SectionWithContentQueryResponse swcResponse = (SectionWithContentQueryResponse) resp;
 //                    }
-                        Logger.i("sss", resp.toString());
-                        if (isMore) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    onNetDataCallback.onMore(resp);
-                                }
-                            });
+                            Logger.i("sss", resp.toString());
+                            if (isMore) {
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        onNetDataCallback.onMore(resp);
+                                    }
+                                });
+                            } else {
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        onNetDataCallback.onSuccess(resp);
+                                    }
+                                });
+                            }
+
                         } else {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    onNetDataCallback.onSuccess(resp);
-                                }
-                            });
+                            throw new IOException("response error--" + response.message());
                         }
 
-                    } else {
-                        throw new IOException("response error--" + response.message());
                     }
-
-                }
-            });
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -164,6 +172,17 @@ public class DataUtil {
             boolean isMore = startId <= 1 ? false : true;
             Logger.i(TAG, "getMoreSectionList startId--" + startId);
             doPost(Sdk.Url.ContentListOfsectionUrl, csqRequest, ContentListOfSectionQueryResponse.class, isMore, onNetDataCallback);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void getSectionListByIds(OnNetDataCallback onNetDataCallback, List<ContentPreciseQueryRequest> requests) {
+
+        try {
+            ContentListPreciseQueryRequest request = new ContentListPreciseQueryRequest();
+            request.setRequestList(requests);
+            doPost(Sdk.Url.ContentListPreciseQuery, request, ContentListPreciseQueryResponse.class, false, onNetDataCallback);
         } catch (Exception e) {
             e.printStackTrace();
         }

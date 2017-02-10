@@ -23,7 +23,7 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public String setToolBarTitile() {
+    public String setToolBarTitle() {
         return "反馈";
     }
 

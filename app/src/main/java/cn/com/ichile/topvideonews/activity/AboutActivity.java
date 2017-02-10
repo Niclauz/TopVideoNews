@@ -23,7 +23,7 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
     }
 
     @Override
-    public String setToolBarTitile() {
+    public String setToolBarTitle() {
         return "关于";
     }
 

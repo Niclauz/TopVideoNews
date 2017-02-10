@@ -1,18 +1,17 @@
 package cn.api.message;
 
-import java.util.List;
 
 import cn.api.model.Content;
 
 public class ContentPreciseQueryResponse {
-	private List<Content> contentList;
+    private Content content;
 
-	public List<Content> getContentList() {
-		return contentList;
-	}
+    public Content getContent() {
+        return content;
+    }
 
-	public void setContentList(List<Content> contentList) {
-		this.contentList = contentList;
-	}
-	
+    public void setContent(Content content) {
+        this.content = content;
+    }
+
 }

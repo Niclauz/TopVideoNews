@@ -13,7 +13,7 @@
         android:padding="@dimen/base5dp"
         android:text="天王盖地虎 \n 小鸡炖蘑菇"
         android:textColor="@color/colorBlack"
-        android:textSize="20sp"/>
+        android:textSize="18sp"/>
 
 
     <RelativeLayout
@@ -76,16 +76,19 @@
                 android:id="@+id/ib_item_share"
                 android:layout_width="@dimen/base30dp"
                 android:layout_height="@dimen/base30dp"
+                android:background="@android:color/transparent"
                 android:scaleType="center"
-                android:src="@drawable/ic_menu_share"/>
+                android:src="@drawable/like_selected"/>
 
             <ImageButton
                 android:id="@+id/ib_item_like"
                 android:layout_width="@dimen/base30dp"
                 android:layout_height="@dimen/base30dp"
                 android:layout_toRightOf="@id/ib_item_share"
+                android:background="@android:color/transparent"
+                android:clickable="true"
                 android:scaleType="center"
-                android:src="@drawable/ic_menu_send"/>
+                android:src="@drawable/like_normal"/>
         </LinearLayout>
 
         <!--<cn.sharesdk.socialization.QuickCommentBar-->

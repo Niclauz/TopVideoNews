@@ -24,16 +24,13 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public String setToolBarTitile() {
+    public String setToolBarTitle() {
         return "设置";
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_appbar_back:
-                finish();
-                break;
 
             default:
                 break;

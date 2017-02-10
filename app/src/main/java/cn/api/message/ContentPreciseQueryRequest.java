@@ -1,17 +1,22 @@
 package cn.api.message;
 
-import java.util.HashMap;
-import java.util.List;
-
 public class ContentPreciseQueryRequest {
-	private List<HashMap<String, Integer>> msg;
+    private int isMian;
+    private long contentId;
 
-	public List<HashMap<String, Integer>> getMsg() {
-		return msg;
-	}
+    public int getIsMian() {
+        return isMian;
+    }
 
-	public void setMsg(List<HashMap<String, Integer>> msg) {
-		this.msg = msg;
-	}
-	
+    public void setIsMian(int isMian) {
+        this.isMian = isMian;
+    }
+
+    public long getContentId() {
+        return contentId;
+    }
+
+    public void setContentId(long contentId) {
+        this.contentId = contentId;
+    }
 }

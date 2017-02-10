@@ -24,7 +24,7 @@ public class HistoryActivity extends BaseActivity implements View.OnClickListene
     }
 
     @Override
-    public String setToolBarTitile() {
+    public String setToolBarTitle() {
         return "历史";
     }
 

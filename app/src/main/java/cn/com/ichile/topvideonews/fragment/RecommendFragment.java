@@ -116,7 +116,7 @@ public class RecommendFragment extends BaseFragment {
 //                snackbar.show();
 
 
-                UiUtil.showSimpleSnackbar(getContext(),view,"已刷新","确定",null);
+                UiUtil.showSimpleSnackbar(getContext(), view, "已刷新", "确定", null);
                 DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionId);
             }
         });
@@ -155,20 +155,13 @@ public class RecommendFragment extends BaseFragment {
                     if ((indexPosition < mFirstVisibleItemPosition
                             || indexPosition > mLastVisibleItemPosition)
                             ) {
-//                        if (videoSuperPlayer != null) {
-//                            VideoSuperPlayer.VideoPlayCallbackInterface videoPlayCallback = videoSuperPlayer.getVideoPlayCallback();
-//                            if (videoPlayCallback != null) {
-//                                videoPlayCallback.onCloseVideo();
-//                                mRecommendRecyAdapter.notifyDataSetChanged();
-//                                MediaHelp.release();
-//                            }
-//
-//                        }
 
                         VideoSuperPlayer currPlayPlayer = adapter.getCurrPlayPlayer();
                         if (currPlayPlayer != null) {
                             VideoSuperPlayer.VideoPlayCallbackInterface videoPlayCallback = currPlayPlayer.getVideoPlayCallback();
-                            videoPlayCallback.onCloseVideo();
+                            if (videoPlayCallback != null) {
+                                videoPlayCallback.onCloseVideo();
+                            }
                             currPlayPlayer.setVisibility(View.GONE);
                         }
                     }
@@ -185,39 +178,13 @@ public class RecommendFragment extends BaseFragment {
                     mFirstVisibleItemPosition = lm.findFirstVisibleItemPosition();
                     mLastVisibleItemPosition = lm.findLastVisibleItemPosition();
                 }
+
             }
         };
         mRecycleView.addOnScrollListener(onScrollListener);
 
     }
 
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        RecommendRecyAdapter adapter = (RecommendRecyAdapter) mRecycleView.getAdapter();
-////        VideoSuperPlayer videoSuperPlayer = adapter.getVideoSuperPlayer();
-////        int indexPosition = adapter.getIndexPosition();
-////        boolean playing = adapter.isPlaying();
-//        VideoSuperPlayer currPlayPlayer = adapter.getCurrPlayPlayer();
-//        if (currPlayPlayer != null) {
-//            VideoSuperPlayer.VideoPlayCallbackInterface videoPlayCallback = currPlayPlayer.getVideoPlayCallback();
-//            videoPlayCallback.onCloseVideo();
-//            currPlayPlayer.setVisibility(View.GONE);
-//        }
-//    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        RecommendRecyAdapter adapter = (RecommendRecyAdapter) mRecycleView.getAdapter();
-        VideoSuperPlayer currPlayPlayer = adapter.getCurrPlayPlayer();
-        if (currPlayPlayer != null) {
-            VideoSuperPlayer.VideoPlayCallbackInterface videoPlayCallback = currPlayPlayer.getVideoPlayCallback();
-            videoPlayCallback.onCloseVideo();
-            currPlayPlayer.setVisibility(View.GONE);
-        }
-    }
 
     @Override
     public void onDestroyView() {

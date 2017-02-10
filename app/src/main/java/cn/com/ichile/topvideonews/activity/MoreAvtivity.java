@@ -23,16 +23,13 @@ public class MoreAvtivity extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
-    public String setToolBarTitile() {
+    public String setToolBarTitle() {
         return "更多";
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_appbar_back:
-                finish();
-                break;
 
             default:
                 break;

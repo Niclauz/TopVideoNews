@@ -14,6 +14,9 @@ public class Cons {
     public static final String TB_HISTORY = "history";
     public static final String TB_FAVERITE = "faverite";
     public static final String TB_ORIGINAL = "original";
+    public static final String TB_COLLECTION = "collection";
+    public static final String TB_COLLECTION_UNIQUE = "collection_unique";
+    public static final String TB_COLLECTION_FULL = "collection_full";
 
 
 

@@ -61,7 +61,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     @Override
-    public String setToolBarTitile() {
+    public String setToolBarTitle() {
         return null;
     }
 

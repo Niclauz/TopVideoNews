@@ -66,7 +66,7 @@ public class FullVideoActivity extends BaseActivity {
     }
 
     @Override
-    public String setToolBarTitile() {
+    public String setToolBarTitle() {
         return null;
     }
 

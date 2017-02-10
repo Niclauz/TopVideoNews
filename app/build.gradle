@@ -136,18 +136,15 @@ dependencies {
     compile files('src/main/libs/mobAPI-1.0.6.jar')
     compile files('src/main/libs/utdid4all-1.0.4.jar')
     compile files('src/main/libs/ShareSDK-Socialization-1.1.0.jar')
-
-
     //可选，用于生成application类
-    provided('com.tencent.tinker:tinker-android-anno:1.7.6')
+    provided 'com.tencent.tinker:tinker-android-anno:1.7.6'
     //tinker的核心库
-    compile('com.tencent.tinker:tinker-android-lib:1.7.6')
-
+    compile 'com.tencent.tinker:tinker-android-lib:1.7.6'
     compile("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") { changing = true }
     provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
-
-    compile "com.android.support:multidex:1.0.1"
-
+    compile 'com.android.support:multidex:1.0.1'
+    compile project(':list-visibility-utils')
+    compile project(':video-player-manager')
 }
 
 def gitSha() {

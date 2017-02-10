@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.umeng.message.PushAgent;
@@ -24,7 +24,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         baseOnCreate(savedInstanceState);
         if (hasToolBar()) {
-            Button button = (Button) findViewById(R.id.btn_appbar_back);
+            ImageButton button = (ImageButton) findViewById(R.id.ib_appbar_back);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -33,7 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             });
 
             TextView textView = (TextView) findViewById(R.id.tv_toolbar_title);
-            textView.setText(StringUtil.strOrNull(setToolBarTitile()));
+            textView.setText(StringUtil.strOrNull(setToolBarTitle()));
         }
         PushAgent.getInstance(this).onAppStart();
     }
@@ -42,5 +42,5 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public abstract boolean hasToolBar();
 
-    public abstract String setToolBarTitile();
+    public abstract String setToolBarTitle();
 }

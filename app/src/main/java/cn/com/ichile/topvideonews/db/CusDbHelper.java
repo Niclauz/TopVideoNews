@@ -41,7 +41,7 @@ public class CusDbHelper extends SQLiteOpenHelper {
                 + "video_src TEXT,"//内容源
                 + "create_time TIMESTAMP NOT NULL DEFAULT (DATETIME('now','localtime')))");
 
-        //收藏
+
         db.execSQL("CREATE TABLE IF NOT EXISTS " + Cons.TB_FAVERITE + "("
                 + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "video_token VARCHAR(20),"//视频唯一id
@@ -52,6 +52,28 @@ public class CusDbHelper extends SQLiteOpenHelper {
                 + "video_src TEXT,"//内容源
                 + "create_time TIMESTAMP NOT NULL DEFAULT (DATETIME('now','localtime')))");
 
+        //保存收藏内容的content_id 和 id_main 属性，以此从服务器查询可用的content
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + Cons.TB_COLLECTION + "("
+                + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + "content_id INTEGER(20),"
+                + "is_main INTEGER(5),"
+                + "create_time TIMESTAMP NOT NULL DEFAULT (DATETIME('now','localtime')))");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + Cons.TB_COLLECTION_UNIQUE + "("
+                + "_id INTEGER AUTOINCREMENT,"
+                + "content_id INTEGER(20),"
+                + "is_main INTEGER(5),"
+                + "PRIMARY KEY(content_id,is_main)"
+                + "create_time TIMESTAMP NOT NULL DEFAULT (DATETIME('now','localtime')))");
+
+        //保存页面需要的全部字段
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + Cons.TB_COLLECTION_FULL + "("
+                + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + "src_site TEXT,"
+                + "title1 TEXT,"
+                + "image1 TEXT,"
+                + "play_stream,"
+                + "create_time TIMESTAMP NOT NULL DEFAULT (DATETIME('now','localtime')))");
 
     }
 
