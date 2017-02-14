@@ -59,12 +59,15 @@ public class CusDbHelper extends SQLiteOpenHelper {
                 + "is_main INTEGER(5),"
                 + "create_time TIMESTAMP NOT NULL DEFAULT (DATETIME('now','localtime')))");
 
+        //
         db.execSQL("CREATE TABLE IF NOT EXISTS " + Cons.TB_COLLECTION_UNIQUE + "("
-                + "_id INTEGER AUTOINCREMENT,"
+                + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "content_id INTEGER(20),"
                 + "is_main INTEGER(5),"
-                + "PRIMARY KEY(content_id,is_main)"
-                + "create_time TIMESTAMP NOT NULL DEFAULT (DATETIME('now','localtime')))");
+                + "create_time TIMESTAMP NOT NULL DEFAULT (DATETIME('now','localtime')) "
+                + ")");
+
+        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_u ON " + Cons.TB_COLLECTION_UNIQUE +"(content_id,is_main) ");
 
         //保存页面需要的全部字段
         db.execSQL("CREATE TABLE IF NOT EXISTS " + Cons.TB_COLLECTION_FULL + "("

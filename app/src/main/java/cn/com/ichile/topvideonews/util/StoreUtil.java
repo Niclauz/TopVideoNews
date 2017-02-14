@@ -19,7 +19,7 @@ public class StoreUtil {
     private static final String CONTENT_ID = "=content_id";
 
     //contentMian-1,contentSub-0
-    public static void addCollection(Context context,ContentBase content, long content_id) throws Exception{
+    public static void addCollection(Context context, ContentBase content, long content_id) throws Exception {
         int isMian = 1;
         if (content instanceof ContentMain) {
             isMian = 1;
@@ -33,6 +33,34 @@ public class StoreUtil {
         dao.addListWithId(request);
     }
 
+    public static void addCollectionUnique(Context context, ContentBase content) {
+        CollectionDao dao = new CollectionDao(context, null);
+        try {
+            dao.addCollWithIdUnique(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    public static boolean isCollected(Context context, ContentBase content) {
+        CollectionDao dao = new CollectionDao(context, null);
+        boolean flag = false;
+        try {
+            flag = dao.isCollected(content);
+        } catch (Exception e) {
+            flag = false;
+            e.printStackTrace();
+        }
+        return flag;
+    }
+
+    public static void deleteCollectionUnique(Context context, ContentBase content) {
+        CollectionDao dao = new CollectionDao(context, null);
+        try {
+            dao.deleteCollByIdUnique(content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

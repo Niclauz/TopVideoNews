@@ -1,8 +1,6 @@
 package cn.com.ichile.topvideonews.adapter;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,10 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.mob.tools.utils.ResHelper;
-import com.mob.tools.utils.UIHandler;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -34,17 +29,9 @@ import cn.com.ichile.topvideonews.widget.MediaHelp;
 import cn.com.ichile.topvideonews.widget.PlayStateCallback;
 import cn.com.ichile.topvideonews.widget.VideoSuperPlayer;
 import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.onekeyshare.ShareTool;
-import cn.sharesdk.socialization.Comment;
-import cn.sharesdk.socialization.CommentFilter;
-import cn.sharesdk.socialization.CommentListener;
-import cn.sharesdk.socialization.LikeListener;
-import cn.sharesdk.socialization.QuickCommentBar;
-import cn.sharesdk.socialization.Socialization;
-import cn.sharesdk.socialization.component.ReplyTooFrequentlyException;
 
 
 /**
@@ -52,7 +39,7 @@ import cn.sharesdk.socialization.component.ReplyTooFrequentlyException;
  * Created by WangZQ on 2017/1/9 - 14:03.
  */
 
-public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements OnNetDataCallback, View.OnClickListener, Handler.Callback {
+public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements OnNetDataCallback, View.OnClickListener{
     private static final int INIT_SDK = 1;
     private static final int AFTER_LIKE = 2;
     private static final String TAG = "RecommendRecyAdapter";
@@ -63,17 +50,7 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
     private VideoSuperPlayer currPlayPlayer;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     //share sdk
-    // 模拟的主题id
-    private String topicId;
-    // 模拟的主题标题
-    private String topicTitle;
-    // 模拟的主题发布时间
-    private String topicPublishTime;
-    // 模拟的主题作者
-    private String topicAuthor;
     private OnekeyShare oks;
-    private QuickCommentBar qcBar;
-    private CommentFilter filter;
     private TextView mTv_footer_loading;
     private ListVideoPlayCallback videoPlayCallback;
 
@@ -223,112 +200,15 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
         Logger.i(TAG, "CONTENT ID--" + mContentMain.getId());
         holder.mIb_item_like.setOnClickListener(this);
         holder.mIb_item_like.setTag(mContentMain);
+        if (StoreUtil.isCollected(App.getAppContext(), mContentMain)) {
+            holder.mIb_item_like.setImageDrawable(App.getAppContext().getResources().getDrawable(R.drawable.like_selected));
+        } else {
+            holder.mIb_item_like.setImageDrawable(App.getAppContext().getResources().getDrawable(R.drawable.like_normal));
+        }
         holder.mIb_item_share.setOnClickListener(this);
     }
 
-    private void initShareSdk() {
-        ShareSDK.initSDK(mActivity);
-        ShareSDK.registerService(Socialization.class);
 
-        new Thread() {
-            public void run() {
-                UIHandler.sendEmptyMessageDelayed(INIT_SDK, 100, RecommendRecyAdapter.this);
-            }
-        }.start();
-
-        //设置评论监听
-        Socialization.setCommentListener(new CommentListener() {
-
-            @Override
-            public void onSuccess(Comment comment) {
-                int resId = ResHelper.getStringRes(mActivity, "ssdk_socialization_reply_succeeded");
-                if (resId > 0) {
-                    Toast.makeText(mActivity, resId, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFail(Comment comment) {
-                Toast.makeText(mActivity, comment.getFileCodeString(mActivity), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                if (throwable instanceof ReplyTooFrequentlyException) {
-                    int resId = ResHelper.getStringRes(mActivity, "ssdk_socialization_replay_too_frequently");
-                    if (resId > 0) {
-                        Toast.makeText(mActivity, resId, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    throwable.printStackTrace();
-                }
-            }
-        });
-
-        Socialization.setLikeListener(new LikeListener() {
-
-            @Override
-            public void onSuccess(String topicId, String topicTitle, String commentId) {
-                Message msg = new Message();
-                msg.what = AFTER_LIKE;
-                msg.arg1 = 1;
-                UIHandler.sendMessage(msg, RecommendRecyAdapter.this);
-            }
-
-            @Override
-            public void onFail(String topicId, String topicTitle, String commentId, String error) {
-                Message msg = new Message();
-                msg.what = AFTER_LIKE;
-                msg.arg1 = 2;
-                UIHandler.sendMessage(msg, RecommendRecyAdapter.this);
-            }
-
-        });
-    }
-
-    public boolean handleMessage(Message msg) {
-        switch (msg.what) {
-            case INIT_SDK:
-                topicId = mActivity.getString(R.string.comment_like_id);
-                topicTitle = mActivity.getString(R.string.comment_like_title);
-                topicPublishTime = mActivity.getString(R.string.comment_like_publich_time);
-                topicAuthor = mActivity.getString(R.string.comment_like_author);
-
-                //TopicTitle tt = (TopicTitle) findViewById(R.id.llTopicTitle);
-//                String topicTitle = mActivity.getString(R.string.comment_like_title);
-//                tt.setTitle(topicTitle);
-//                tt.setPublishTime(mActivity.getString(R.string.comment_like_publich_time));
-//                tt.setAuthor(mActivity.getString(R.string.comment_like_author));
-
-
-                Socialization service = ShareSDK.getService(Socialization.class);
-                //service.setCustomPlatform(new MyPlatform(this));
-                initOnekeyShare();
-                break;
-            case AFTER_LIKE:
-                if (msg.arg1 == 1) {
-                    //success
-                    int resId = ResHelper.getStringRes(mActivity, "like_success");
-                    if (resId > 0) {
-                        Toast.makeText(mActivity, resId, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    //fail
-                    int resId = ResHelper.getStringRes(mActivity, "like_fail");
-                    if (resId > 0) {
-                        Toast.makeText(mActivity, resId, Toast.LENGTH_SHORT).show();
-                    }
-                }
-                break;
-            case 3:
-                break;
-            default:
-                break;
-
-        }
-
-        return false;
-    }
 
     // Socialization服务依赖OnekeyShare组件，此方法初始化一个OnekeyShare对象
     // 此方法的代码从DemoPage中复制而来
@@ -357,33 +237,37 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
     }
 
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_item_like:
                 try {
-                    Logger.i(TAG,"ccccccccc");
+                    Logger.i(TAG, "ccccccccc");
                     Object tag = v.getTag();
                     ContentMain contentMain = null;
                     if (tag != null && tag instanceof ContentMain) {
-                        contentMain  = (ContentMain) tag;
-                        if (contentMain != null) {
-                            StoreUtil.addCollection(App.getAppContext(),contentMain,contentMain.getId());
-                            UiUtil.showSimpleSnackbar(App.getAppContext(),v,"收藏成功" + contentMain.getId(),null,null);
+                        contentMain = (ContentMain) tag;
+                        if (!StoreUtil.isCollected(App.getAppContext(), contentMain)) {
+                            StoreUtil.addCollectionUnique(App.getAppContext(), contentMain);
+                            ((ImageButton) v).setImageDrawable(App.getAppContext().getResources().getDrawable(R.drawable.like_selected));
+                            UiUtil.showSimpleSnackbar(App.getAppContext(), v, "收藏成功" + contentMain.getId(), null, null);
+                        } else {
+                            StoreUtil.deleteCollectionUnique(App.getAppContext(), contentMain);
+                            ((ImageButton) v).setImageDrawable(App.getAppContext().getResources().getDrawable(R.drawable.like_normal));
+                            UiUtil.showSimpleSnackbar(App.getAppContext(), v, "取消收藏成功" + contentMain.getId(), null, null);
                         }
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    UiUtil.showSimpleSnackbar(App.getAppContext(),v,"收藏失败，请稍后重试！",null,null);
+                    UiUtil.showSimpleSnackbar(App.getAppContext(), v, "收藏失败，请稍后重试！", null, null);
                 }
                 break;
             case R.id.ib_item_share:
                 Object tag = v.getTag();
                 ContentMain contentMain = null;
                 if (tag != null && tag instanceof ContentMain) {
-                    contentMain  = (ContentMain) tag;
+                    contentMain = (ContentMain) tag;
                     if (contentMain != null) {
                         ShareTool shareTool = new ShareTool(App.getAppContext());
                         shareTool.showShare(contentMain.getSrcSite(), null, contentMain.getTitle1(), contentMain.getImage1(), contentMain.getPlayStreaming());

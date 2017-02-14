@@ -78,7 +78,7 @@
                 android:layout_height="@dimen/base30dp"
                 android:background="@android:color/transparent"
                 android:scaleType="center"
-                android:src="@drawable/like_selected"/>
+                android:src="@drawable/share"/>
 
             <ImageButton
                 android:id="@+id/ib_item_like"

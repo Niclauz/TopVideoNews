@@ -20,6 +20,8 @@ import cn.api.model.ContentMain;
 import cn.com.ichile.topvideonews.App;
 import cn.com.ichile.topvideonews.R;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
+import cn.com.ichile.topvideonews.util.StoreUtil;
+import cn.com.ichile.topvideonews.util.UiUtil;
 import cn.com.ichile.topvideonews.widget.ListVideoPlayCallback;
 import cn.com.ichile.topvideonews.widget.MediaHelp;
 import cn.com.ichile.topvideonews.widget.PlayStateCallback;
@@ -41,11 +43,6 @@ public class CollRecyAdapter extends BaseRecycleAdapter<ContentMain> implements 
     public CollRecyAdapter(List list, Activity activity) {
         super(list);
         mActivity = activity;
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 
     @Override
@@ -117,8 +114,41 @@ public class CollRecyAdapter extends BaseRecycleAdapter<ContentMain> implements 
             viewItemHolder.mVideoSuperPlayer.close();
         }
 
+        if (StoreUtil.isCollected(App.getAppContext(), mContentMain)) {
+            viewItemHolder.mIb_item_like.setImageDrawable(App.getAppContext().getResources().getDrawable(R.drawable.like_selected));
+        } else {
+            viewItemHolder.mIb_item_like.setImageDrawable(App.getAppContext().getResources().getDrawable(R.drawable.like_normal));
+        }
+        viewItemHolder.mIb_item_like.setTag(mContentMain);
+        viewItemHolder.mIb_item_like.setOnClickListener(this);
 
         viewItemHolder.mPlay_btn.setOnClickListener(new RecyOnClick(viewItemHolder.mVideoSuperPlayer, viewItemHolder.mPlay_btn, position));
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ib_item_like:
+                Object tag = v.getTag();
+                if (tag != null && tag instanceof ContentMain) {
+                    ContentMain contentMain = (ContentMain) tag;
+                    if (!StoreUtil.isCollected(App.getAppContext(), contentMain)) {
+                        StoreUtil.addCollectionUnique(App.getAppContext(), contentMain);
+                        ((ImageButton) v).setImageDrawable(App.getAppContext().getResources().getDrawable(R.drawable.like_selected));
+                        UiUtil.showSimpleSnackbar(App.getAppContext(), v, "收藏成功" + contentMain.getId(), null, null);
+                    } else {
+                        StoreUtil.deleteCollectionUnique(App.getAppContext(), contentMain);
+                        ((ImageButton) v).setImageDrawable(App.getAppContext().getResources().getDrawable(R.drawable.like_normal));
+                        UiUtil.showSimpleSnackbar(App.getAppContext(), v, "取消收藏成功" + contentMain.getId(), null, null);
+                    }
+                }
+                break;
+            case R.id.ib_item_share:
+                break;
+            default:
+                break;
+        }
     }
 
 

@@ -69,7 +69,7 @@ public class CollectionActivity extends BaseActivity implements View.OnClickList
     private void initData() {
         try {
             CollectionDao dao = new CollectionDao(App.getAppContext(), null);
-            List<ContentPreciseQueryRequest> requests = dao.getListWithId();
+            List<ContentPreciseQueryRequest> requests = dao.getListWithIdUnique();
             DataUtil.getSectionListByIds(collRecyAdapter, requests);
         } catch (Exception e) {
             e.printStackTrace();
