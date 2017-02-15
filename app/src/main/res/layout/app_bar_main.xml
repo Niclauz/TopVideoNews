@@ -30,7 +30,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:author="@drawable/ic_menu_manage"
-        />
+        android:scaleType="centerInside"
+        android:src="@drawable/up"
+        >
+    </android.support.design.widget.FloatingActionButton>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -138,6 +138,12 @@
 
         </activity>
 
+        <receiver android:name="cn.update.ApkInstallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
+
         <!--umeng -->
         <meta-data
             android:name="UMENG_APPKEY"

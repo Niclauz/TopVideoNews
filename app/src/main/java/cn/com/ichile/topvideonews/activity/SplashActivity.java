@@ -7,8 +7,14 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import cn.com.ichile.topvideonews.R;
 import cn.sharesdk.framework.ShareSDK;
+import cn.update.DownLoadUtils;
+import cn.update.DownloadApk;
+import cn.update.PackageUtil;
 
 /**
  * FBI WARNING ! MAGIC ! DO NOT TOUGH !
@@ -20,6 +26,12 @@ public class SplashActivity extends BaseActivity {
     private static long staTime;
     private static long curTime;
     private long mD;
+
+
+    private boolean AUTO_UPDATE = true; // �Ƿ��Զ�����
+
+    private String desc = ""; // title
+    private String dlUrl = ""; // downloadUrl
 
     private Handler mHandler = new Handler() {
         @Override
@@ -62,6 +74,8 @@ public class SplashActivity extends BaseActivity {
 
         ShareSDK.initSDK(this);
 
+        checkVersionUpdate();
+
 
         new Thread() {
             @Override
@@ -73,6 +87,53 @@ public class SplashActivity extends BaseActivity {
                 mHandler.sendMessage(message);
             }
         }.start();
+    }
+
+    protected void download(String url, String title, String appName) {
+        DownloadApk.registerBroadcast(this);
+        DownloadApk.removeFile(this);
+        if (DownLoadUtils.getInstance(getApplicationContext()).canDownload()) {
+            DownloadApk.downloadApk(getApplicationContext(), "http://d.wifiwin.cn/apk_dl/index.jsp?sfid=dapian",
+                    "����Test", "Test");
+        } else {
+            DownLoadUtils.getInstance(getApplicationContext()).skipToDownloadManager();
+        }
+    }
+
+    private void checkVersionUpdate() {
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                final String json = "";
+                JSONObject object;
+                try {
+                    object = new JSONObject(json);
+                    int remoteCode = object.getInt("versionCode");
+                    desc = object.getString("desc");
+                    dlUrl = object.getString("url");
+
+                    int localCode = PackageUtil.getVersionCode(getApplicationContext());
+                    if (remoteCode > localCode) {
+                        if (AUTO_UPDATE) {
+                            // TODO ����
+                            // download();
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        DownloadApk.unregisterBroadcast(this);
+        super.onDestroy();
     }
 
     @Override

@@ -18,6 +18,7 @@ import com.umeng.message.PushAgent;
 
 import cn.tinker.MyLogImp;
 import cn.tinker.TinkerManager;
+import cn.update.SystemParams;
 
 /**
  * FBI WARNING ! MAGIC ! DO NOT TOUGH !
@@ -74,6 +75,8 @@ public class SampleApplicationLike extends DefaultApplicationLike {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        SystemParams.init(getApplication());
 
         PushAgent mPushAgent = PushAgent.getInstance(getApplication());
         //注册推送服务，每次调用register方法都会回调该接口

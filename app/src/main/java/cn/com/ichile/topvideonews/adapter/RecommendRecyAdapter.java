@@ -175,6 +175,10 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
             mContentMain = c.getMainContent();
         }
 
+        if (mContentMain == null) {
+            return;
+        }
+
         Log.i("hhhhh", "hhhhh----" + mContentMain.toString() + "");
         currPlayPlayer = holder.mVideoSuperPlayer;
 
