@@ -1,6 +1,8 @@
 package cn.api.model;
 
-public class Type {
+import java.io.Serializable;
+
+public class Type implements Serializable{
     /**
      * typeNum        分类区别编号 TypeNum.type1 or TypeNum.type2
      * 对应 content type1 or type2

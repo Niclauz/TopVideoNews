@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="250dp"
+              android:orientation="vertical">
+
+    <CalendarView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#880000"
+        android:padding="8dp">
+
+        <cn.com.ichile.pigplayer.core.PigPlayer
+            android:id="@+id/pp_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+        <ImageView
+            android:id="@+id/btn_play"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@mipmap/ic_launcher"/>
+
+    </CalendarView>
+
+</LinearLayout>

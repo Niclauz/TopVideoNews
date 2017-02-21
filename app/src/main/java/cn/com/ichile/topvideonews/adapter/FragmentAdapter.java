@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.api.message.SectionQueryResponse;
-import cn.api.model.Section;
+import cn.api.message.TypeQueryResponse;
+import cn.api.model.Type;
 import cn.com.ichile.topvideonews.callback.OnFragmentBind;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
 import cn.com.ichile.topvideonews.fragment.RecommendFragment;
@@ -24,7 +24,7 @@ import cn.com.ichile.topvideonews.fragment.RecommendFragment;
 
 public class FragmentAdapter extends FragmentPagerAdapter implements OnNetDataCallback {
     private List<Fragment> mFragmentList;
-    private List<Section> mTitleList;
+    private List<Type> mTitleList;
     private TabLayout mTabLayout;
     private Fragment mCurrentFragment;
     private OnFragmentBind mOnFragmentBind;
@@ -68,9 +68,9 @@ public class FragmentAdapter extends FragmentPagerAdapter implements OnNetDataCa
 
     @Override
     public void onSuccess(Object... data) {
-        if (data[0] instanceof SectionQueryResponse) {
-            SectionQueryResponse responses = (SectionQueryResponse) data[0];
-            mTitleList = responses.getSectionList();
+        if (data[0] instanceof TypeQueryResponse) {
+            TypeQueryResponse responses = (TypeQueryResponse) data[0];
+            mTitleList = responses.getTypeList();
             if (mFragmentList == null) {
                 mFragmentList = new ArrayList<>();
             }
@@ -78,7 +78,7 @@ public class FragmentAdapter extends FragmentPagerAdapter implements OnNetDataCa
             for (int i = 0; i < mTitleList.size(); i++) {
                 RecommendFragment recommendFragment = new RecommendFragment();
                 Bundle args = new Bundle();
-                args.putSerializable("section", mTitleList.get(i));
+                args.putSerializable("type", mTitleList.get(i));
                 recommendFragment.setArguments(args);
                 mFragmentList.add(recommendFragment);
             }

@@ -1,1 +1,1 @@
-include ':app', ':PushSDK', ':video-player-manager', ':list-visibility-utils'
+include ':app', ':PushSDK', ':video-player-manager', ':list-visibility-utils', ':pig-player', ':playertest'

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="pig_audio_progress_bg">#00b2ff</color>
+    <color name="pig_audio_progress_first">#ffffff</color>
+    <color name="pig_audio_progress_second">#6b6666</color>
+    <color name="pig_color_black">#000000</color>
+    <color name="pig_color_dark_gray">#2b2a2a</color>
+
+</resources>

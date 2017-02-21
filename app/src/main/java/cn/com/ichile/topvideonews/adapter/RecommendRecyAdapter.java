@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import cn.api.message.ContentListOfSectionQueryResponse;
+import cn.api.message.ContentListByTypeQueryResponse;
 import cn.api.model.Constants;
 import cn.api.model.Content;
 import cn.api.model.ContentMain;
@@ -75,8 +75,8 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
 
     @Override
     public void onSuccess(Object... data) {
-        if (data != null && data[0] instanceof ContentListOfSectionQueryResponse) {
-            ContentListOfSectionQueryResponse csqResponse = (ContentListOfSectionQueryResponse) data[0];
+        if (data != null && data[0] instanceof ContentListByTypeQueryResponse) {
+            ContentListByTypeQueryResponse csqResponse = (ContentListByTypeQueryResponse) data[0];
             List<Content> contentList = csqResponse.getContentList();
             addAll(contentList);
         }
@@ -97,8 +97,8 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
 
     @Override
     public void onMore(Object... data) {
-        if (data != null && data[0] instanceof ContentListOfSectionQueryResponse) {
-            ContentListOfSectionQueryResponse csqResponse = (ContentListOfSectionQueryResponse) data[0];
+        if (data != null && data[0] instanceof ContentListByTypeQueryResponse) {
+            ContentListByTypeQueryResponse csqResponse = (ContentListByTypeQueryResponse) data[0];
             List<Content> contentList = csqResponse.getContentList();
             if (mTv_footer_loading != null && mTv_footer_loading.getVisibility() == View.VISIBLE) {
                 if (contentList.size() == 0) {
@@ -165,6 +165,22 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof VideoItemHolder) {
             setItemValues((VideoItemHolder) holder, position);
+        }
+    }
+
+
+
+    @Override
+    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        Logger.i(TAG,"**********************************");
+        if(holder instanceof  VideoItemHolder){
+            VideoItemHolder holdera=  (VideoItemHolder)holder;
+            if(holdera.mVideoSuperPlayer!=null&&isPlaying){
+                holdera.mVideoSuperPlayer.close();
+                holdera.mVideoSuperPlayer.setVisibility(View.GONE);
+                isPlaying = false;
+            }
         }
     }
 
@@ -326,7 +342,7 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
             });
             cVideoSuperPlayer.setVideoPlayCallback(videoPlayCallback);
 
-            notifyDataSetChanged();
+            //notifyDataSetChanged();
         }
 
 

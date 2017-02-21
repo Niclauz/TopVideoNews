@@ -10,6 +10,8 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/cn/api/message/SectionQueryRequest.java" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/cn/api/model/Constants.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/cn/api/model/SectionWithContent.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/cn/update/DownloadApk.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/cn/update/MainActivity.java" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

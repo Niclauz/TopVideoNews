@@ -18,7 +18,6 @@ import cn.com.ichile.topvideonews.adapter.RecommendRecyAdapter;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
 import cn.com.ichile.topvideonews.net.DataUtil;
 import cn.com.ichile.topvideonews.util.UiUtil;
-import cn.com.ichile.topvideonews.widget.VideoSuperPlayer;
 
 /**
  * FBI WARNING ! MAGIC ! DO NOT TOUGH !
@@ -59,7 +58,7 @@ public class RecommendFragment extends BaseFragment {
         }
         //设置数据
         // DataUtil.getVideoList(Cons.RECOMMEND, mRecommendRecyAdapter);
-        DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionId);
+        DataUtil.getContentList(mRecommendRecyAdapter,typeCode,type);
     }
 
     long startId = 1;
@@ -81,11 +80,13 @@ public class RecommendFragment extends BaseFragment {
                 if (newState == recyclerView.SCROLL_STATE_IDLE
                         && mLastVisibleItemPosition + 1 == mRecommendRecyAdapter.getItemCount()) {
                     //***************load more
-                    int size = mRecommendRecyAdapter.getData().size();
+                    //int size = mRecommendRecyAdapter.getData().size();
                     //long startId = size <= 1 ? 0 : mRecommendRecyAdapter.getData().get(mRecommendRecyAdapter.getData().size() - 1).getMainContent().getId();
 
-                    DataUtil.getMoreSectionList(mRecommendRecyAdapter, productCode, sectionId, ++startId);
+//                    DataUtil.getMoreSectionList(mRecommendRecyAdapter, productCode, sectionId, ++startId);
+                    DataUtil.getMoreContentList(mRecommendRecyAdapter, typeCode, type, ++startId);
                 }
+
             }
 
             @Override
@@ -117,7 +118,7 @@ public class RecommendFragment extends BaseFragment {
 
 
                 UiUtil.showSimpleSnackbar(getContext(), view, "已刷新", "确定", null);
-                DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionId);
+                DataUtil.getContentList(mRecommendRecyAdapter, typeCode, type);
             }
         });
     }
@@ -136,7 +137,7 @@ public class RecommendFragment extends BaseFragment {
         //初始化首页数据
         if (mainActivity.getPagerPosition() == 0) {
             //DataUtil.getVideoList(Cons.RECOMMEND, mRecommendRecyAdapter);
-            DataUtil.getSectionList(mRecommendRecyAdapter, productCode, sectionId);
+            DataUtil.getContentList(mRecommendRecyAdapter, typeCode, type);
         }
 
         onScrollListener = new RecyclerView.OnScrollListener() {
@@ -147,25 +148,25 @@ public class RecommendFragment extends BaseFragment {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    RecommendRecyAdapter adapter = (RecommendRecyAdapter) mRecycleView.getAdapter();
-                    int indexPosition = adapter.getIndexPosition();
-//                    VideoSuperPlayer videoSuperPlayer = adapter.getVideoSuperPlayer();
-//                    boolean playing = adapter.isPlaying();
-                    if ((indexPosition < mFirstVisibleItemPosition
-                            || indexPosition > mLastVisibleItemPosition)
-                            ) {
-
-                        VideoSuperPlayer currPlayPlayer = adapter.getCurrPlayPlayer();
-                        if (currPlayPlayer != null) {
-                            VideoSuperPlayer.VideoPlayCallbackInterface videoPlayCallback = currPlayPlayer.getVideoPlayCallback();
-                            if (videoPlayCallback != null) {
-                                videoPlayCallback.onCloseVideo();
-                            }
-                            currPlayPlayer.setVisibility(View.GONE);
-                        }
-                    }
-                }
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                    RecommendRecyAdapter adapter = (RecommendRecyAdapter) mRecycleView.getAdapter();
+//                    int indexPosition = adapter.getIndexPosition();
+////                    VideoSuperPlayer videoSuperPlayer = adapter.getVideoSuperPlayer();
+////                    boolean playing = adapter.isPlaying();
+//                    if ((indexPosition < mFirstVisibleItemPosition
+//                            || indexPosition > mLastVisibleItemPosition)
+//                            ) {
+//
+//                        VideoSuperPlayer currPlayPlayer = adapter.getCurrPlayPlayer();
+//                        if (currPlayPlayer != null) {
+//                            VideoSuperPlayer.VideoPlayCallbackInterface videoPlayCallback = currPlayPlayer.getVideoPlayCallback();
+//                            if (videoPlayCallback != null) {
+//                                videoPlayCallback.onCloseVideo();
+//                            }
+//                            currPlayPlayer.setVisibility(View.GONE);
+//                        }
+//                    }
+//                }
 
             }
 

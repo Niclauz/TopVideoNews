@@ -175,7 +175,7 @@ public class MainActivity extends BaseActivity
             }
         });
         //***********获取tab列表
-        DataUtil.getTabList(mFragmentAdapter);
+        DataUtil.getTabListType(mFragmentAdapter);
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mFragmentAdapter);
         tabLayout.setupWithViewPager(mViewPager);

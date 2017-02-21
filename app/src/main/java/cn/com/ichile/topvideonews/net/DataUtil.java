@@ -15,11 +15,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import cn.api.Sdk;
+import cn.api.message.ContentListByTypeQueryRequest;
+import cn.api.message.ContentListByTypeQueryResponse;
 import cn.api.message.ContentListOfSectionQueryRequest;
 import cn.api.message.ContentListOfSectionQueryResponse;
 import cn.api.message.ContentListPreciseQueryRequest;
@@ -27,6 +30,8 @@ import cn.api.message.ContentListPreciseQueryResponse;
 import cn.api.message.ContentPreciseQueryRequest;
 import cn.api.message.SectionQueryRequest;
 import cn.api.message.SectionQueryResponse;
+import cn.api.message.TypeQueryRequest;
+import cn.api.message.TypeQueryResponse;
 import cn.com.ichile.topvideonews.App;
 import cn.com.ichile.topvideonews.Cons;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
@@ -103,7 +108,7 @@ public class DataUtil {
                         isLoading = false;
                         if (response.isSuccessful()) {
                             Logger.i(TAG, "******" + response.body().toString());
-                            final T resp = new Gson().fromJson(response.body().charStream(), clazz);
+                            final T resp = new Gson().fromJson(URLDecoder.decode(response.body().string(), "utf-8"), clazz);
 //                    if (resp instanceof SectionQueryResponse) {
 //                        SectionQueryResponse sectionQueryResponse = (SectionQueryResponse) resp;
 //                    }else if(resp instanceof ContentListOfSectionQueryResponse) {
@@ -153,6 +158,37 @@ public class DataUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void getTabListType(OnNetDataCallback onNetDataCallback) {
+        try {
+            TypeQueryRequest typeQueryRequest = new TypeQueryRequest();
+            typeQueryRequest.setProductCode("1");
+            doPost(Sdk.Url.TypeQueryUrl, typeQueryRequest, TypeQueryResponse.class, false, onNetDataCallback);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void getMoreContentList(OnNetDataCallback onNetDataCallback, String typeCode,int typeNum, long startId) {
+        try {
+            Logger.i(TAG, "getMoreSectionList---" + startId);
+            ContentListByTypeQueryRequest csqRequest = new ContentListByTypeQueryRequest();
+            csqRequest.setTypeCode(typeCode);
+            csqRequest.setPageSize(10);
+            csqRequest.setTypeNum(typeNum);
+            csqRequest.setStartId(startId < 1 ? 1 : startId);
+            boolean isMore = startId <= 1 ? false : true;
+            Logger.i(TAG, "getMoreSectionList startId--" + startId);
+            doPost(Sdk.Url.ContentListByTypeQueryUrl, csqRequest,  ContentListByTypeQueryResponse.class, isMore, onNetDataCallback);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void getContentList(OnNetDataCallback onNetDataCallback, String typeCode,int typeNum) {
+        getMoreContentList(onNetDataCallback,typeCode,typeNum,1);
     }
 
     public static void getSectionList(OnNetDataCallback onNetDataCallback, String productCode, int sectionId) {

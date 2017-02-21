@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * This class encapsulates {@link MediaPlayer}
  * and follows this use-case diagram:
- *
+ * <p>
  * http://developer.android.com/reference/android/media/MediaPlayer.html
  */
 public abstract class MediaPlayerWrapper
@@ -31,8 +31,7 @@ public abstract class MediaPlayerWrapper
         MediaPlayer.OnBufferingUpdateListener,
         MediaPlayer.OnInfoListener,
         MediaPlayer.OnCompletionListener,
-        MediaPlayer.OnVideoSizeChangedListener
-{
+        MediaPlayer.OnVideoSizeChangedListener {
 
     private String TAG;
     private static final boolean SHOW_LOGS = Config.SHOW_LOGS;
@@ -69,7 +68,7 @@ public abstract class MediaPlayerWrapper
         if (SHOW_LOGS) Logger.v(TAG, "constructor of MediaPlayerWrapper, main Looper " + Looper.getMainLooper());
         if (SHOW_LOGS) Logger.v(TAG, "constructor of MediaPlayerWrapper, my Looper " + Looper.myLooper());
 
-        if(Looper.myLooper() != null){
+        if (Looper.myLooper() != null) {
             throw new RuntimeException("myLooper not null, a bug in some MediaPlayer implementation cause that listeners are not called at all. Please use a thread without Looper");
         }
         mMediaPlayer = mediaPlayer;
@@ -110,7 +109,7 @@ public abstract class MediaPlayerWrapper
                         /** we should not call {@link MediaPlayerWrapper#prepare()} in wrong state so we fall here*/
                         throw new RuntimeException(ex);
 
-                    } catch (IOException ex){
+                    } catch (IOException ex) {
                         onPrepareError(ex);
                     }
                     break;
@@ -130,6 +129,7 @@ public abstract class MediaPlayerWrapper
 
     /**
      * This method propagates error when {@link IOException} is thrown during synchronous {@link #prepare()}
+     *
      * @param ex
      */
     private void onPrepareError(IOException ex) {
@@ -137,7 +137,7 @@ public abstract class MediaPlayerWrapper
         // might happen because of lost internet connection
 //      TODO: if (SHOW_LOGS) Logger.err(TAG, "catch exception, is Network Connected [" + Utils.isNetworkConnected());
         mState.set(State.ERROR);
-        if(mListener != null){
+        if (mListener != null) {
             mListener.onErrorMainThread(1, -1004); //TODO: remove magic numbers. Find a way to get actual error
         }
         if (mListener != null) {
@@ -210,7 +210,7 @@ public abstract class MediaPlayerWrapper
     @Override
     public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
         if (SHOW_LOGS) Logger.v(TAG, "onVideoSizeChanged, width " + width + ", height " + height);
-        if(!inUiThread()){
+        if (!inUiThread()) {
             throw new RuntimeException("this should be called in Main Thread");
         }
         if (mListener != null) {
@@ -239,7 +239,7 @@ public abstract class MediaPlayerWrapper
             mState.set(State.ERROR);
         }
 
-        if(positionUpdaterIsWorking()){
+        if (positionUpdaterIsWorking()) {
             stopPositionUpdateNotifier();
         }
         if (SHOW_LOGS) Logger.v(TAG, "onErrorMainThread, mListener " + mListener);
@@ -374,7 +374,7 @@ public abstract class MediaPlayerWrapper
                 case STOPPED:
                 case PREPARED:
                 case END:
-                    throw new IllegalStateException("pause, called from illegal state "  + mState);
+                    throw new IllegalStateException("pause, called from illegal state " + mState);
 
                 case STARTED:
                     mMediaPlayer.pause();
@@ -491,7 +491,7 @@ public abstract class MediaPlayerWrapper
         if (SHOW_LOGS) Logger.v(TAG, "setSurfaceTexture mSurface " + mSurface);
 
 
-        if(surfaceTexture != null){
+        if (surfaceTexture != null) {
             mSurface = new Surface(surfaceTexture);
             mMediaPlayer.setSurface(mSurface); // TODO fix illegal state exception
         } else {
@@ -609,11 +609,11 @@ public abstract class MediaPlayerWrapper
     private void startPositionUpdateNotifier() {
         if (SHOW_LOGS)
             Logger.v(TAG, "startPositionUpdateNotifier, mPositionUpdateNotifier " + mPositionUpdateNotifier);
-            mFuture = mPositionUpdateNotifier.scheduleAtFixedRate(
-                    mNotifyPositionUpdateRunnable,
-                    0,
-                    POSITION_UPDATE_NOTIFYING_PERIOD,
-                    TimeUnit.MILLISECONDS);
+        mFuture = mPositionUpdateNotifier.scheduleAtFixedRate(
+                mNotifyPositionUpdateRunnable,
+                0,
+                POSITION_UPDATE_NOTIFYING_PERIOD,
+                TimeUnit.MILLISECONDS);
     }
 
     private void stopPositionUpdateNotifier() {
@@ -635,7 +635,7 @@ public abstract class MediaPlayerWrapper
     }
 
     public State getCurrentState() {
-        synchronized (mState){
+        synchronized (mState) {
             return mState.get();
         }
     }

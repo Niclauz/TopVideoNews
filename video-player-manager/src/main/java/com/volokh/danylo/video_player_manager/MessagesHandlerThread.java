@@ -54,7 +54,7 @@ public class MessagesHandlerThread {
                     mLastMessage = mPlayerMessagesQueue.poll();
 
                     mLastMessage.polledFromQueue();
-                    if (SHOW_LOGS) Logger.v(TAG, "poll mLastMessage " + mLastMessage);
+                    if (SHOW_LOGS)
                     mQueueLock.unlock(TAG);
 
                     if (SHOW_LOGS) Logger.v(TAG, "run, mLastMessage " + mLastMessage);

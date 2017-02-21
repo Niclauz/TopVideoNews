@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cn.api.model.Section;
+import cn.api.model.Type;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
 
 /**
@@ -16,19 +16,20 @@ import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
  */
 
 public abstract class BaseFragment extends Fragment {
-    protected String sectionName;
-    protected String productCode;
-    protected int sectionId;
     //当页面可见时数据加载
     protected boolean isVisiable;
+    protected String typeCode;
+    protected String typeName;
+    protected int type;
 
     @Override
     public void setArguments(Bundle args) {
-        Section section = (Section) args.getSerializable("section");
-        if (section != null)
-            sectionName = section.getName();
-        productCode = section.getProductCode();
-        sectionId = section.getSectionId();
+        Type type = (Type) args.getSerializable("type");
+        if (type != null) {
+            typeCode = type.getCode();
+            typeName = type.getName();
+            this.type = type.getType();
+        }
         super.setArguments(args);
     }
 

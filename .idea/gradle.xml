@@ -12,6 +12,8 @@
             <option value="$PROJECT_DIR$/PushSDK" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/list-visibility-utils" />
+            <option value="$PROJECT_DIR$/pig-player" />
+            <option value="$PROJECT_DIR$/playertest" />
             <option value="$PROJECT_DIR$/video-player-manager" />
           </set>
         </option>

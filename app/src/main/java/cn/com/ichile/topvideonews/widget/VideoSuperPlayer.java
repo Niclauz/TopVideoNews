@@ -29,6 +29,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cn.com.ichile.topvideonews.R;
+import cn.com.ichile.topvideonews.util.Logger;
 
 
 public class VideoSuperPlayer extends RelativeLayout implements
@@ -190,6 +191,7 @@ public class VideoSuperPlayer extends RelativeLayout implements
 
         @Override
         public boolean onError(MediaPlayer mp, int what, int extra) {
+            Logger.i("*****","what -" + what +"--ex--" + extra);
             if (getWindowToken() != null) {
                 Resources r = getContext().getResources();
                 int messageId;
