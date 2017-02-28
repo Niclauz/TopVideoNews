@@ -164,7 +164,11 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof VideoItemHolder) {
-            setItemValues((VideoItemHolder) holder, position);
+            try {
+                setItemValues((VideoItemHolder) holder, position);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -184,7 +188,7 @@ public class RecommendRecyAdapter extends BaseRecycleAdapter<Content> implements
         }
     }
 
-    private void setItemValues(VideoItemHolder holder, int position) {
+    private void setItemValues(VideoItemHolder holder, int position) throws Exception{
 
         Content c = mDataList.get(position);
         if (Constants.ComposeType.OnlyMain.equals(c.getComposeType())) {

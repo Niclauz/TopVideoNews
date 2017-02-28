@@ -30,8 +30,8 @@ import cn.api.message.ContentListPreciseQueryResponse;
 import cn.api.message.ContentPreciseQueryRequest;
 import cn.api.message.SectionQueryRequest;
 import cn.api.message.SectionQueryResponse;
-import cn.api.message.TypeQueryRequest;
-import cn.api.message.TypeQueryResponse;
+import cn.api.message.Type1QueryRequest;
+import cn.api.message.Type1QueryResponse;
 import cn.com.ichile.topvideonews.App;
 import cn.com.ichile.topvideonews.Cons;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
@@ -162,23 +162,24 @@ public class DataUtil {
 
     public static void getTabListType(OnNetDataCallback onNetDataCallback) {
         try {
-            TypeQueryRequest typeQueryRequest = new TypeQueryRequest();
-            typeQueryRequest.setProductCode("1");
-            doPost(Sdk.Url.TypeQueryUrl, typeQueryRequest, TypeQueryResponse.class, false, onNetDataCallback);
+            Type1QueryRequest typeQueryRequest = new Type1QueryRequest();
+            typeQueryRequest.setProductCode(Sdk.Conf.product_code);
+            typeQueryRequest.setOnlyType1(false);
+            doPost(Sdk.Url.Type1QueryUrl, typeQueryRequest, Type1QueryResponse.class, false, onNetDataCallback);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
-    public static void getMoreContentList(OnNetDataCallback onNetDataCallback, String typeCode,int typeNum, long startId) {
+    public static void getMoreContentList(OnNetDataCallback onNetDataCallback, int typeCode,long startId) {
         try {
             Logger.i(TAG, "getMoreSectionList---" + startId);
             ContentListByTypeQueryRequest csqRequest = new ContentListByTypeQueryRequest();
-            csqRequest.setTypeCode(typeCode);
+            csqRequest.setType1Code(typeCode);
             csqRequest.setPageSize(10);
-            csqRequest.setTypeNum(typeNum);
-            csqRequest.setStartId(startId < 1 ? 1 : startId);
+            csqRequest.setProductCode(Sdk.Conf.product_code);
+            csqRequest.setPageNum(startId < 1 ? 1 : startId);
             boolean isMore = startId <= 1 ? false : true;
             Logger.i(TAG, "getMoreSectionList startId--" + startId);
             doPost(Sdk.Url.ContentListByTypeQueryUrl, csqRequest,  ContentListByTypeQueryResponse.class, isMore, onNetDataCallback);
@@ -187,8 +188,9 @@ public class DataUtil {
         }
     }
 
-    public static void getContentList(OnNetDataCallback onNetDataCallback, String typeCode,int typeNum) {
-        getMoreContentList(onNetDataCallback,typeCode,typeNum,1);
+    public static void getContentList(OnNetDataCallback onNetDataCallback, int typeCode) {
+        Logger.i(TAG, "getMoreSectionList startId--" + "**1");
+        getMoreContentList(onNetDataCallback,typeCode,1);
     }
 
     public static void getSectionList(OnNetDataCallback onNetDataCallback, String productCode, int sectionId) {

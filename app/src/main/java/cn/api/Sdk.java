@@ -1,78 +1,93 @@
 package cn.api;
 
+
 public class Sdk
 {
 	public static void main(String[] args) 
 	{
-//		SectionQueryResponse resp=Sdk.sectionQuery("1","1");
-//		SectionWithContentQueryResponse resp = Sdk.sectionWithContentQuery("1", "1", 1, 4);
-//		ContentCreateRequest req=new ContentCreateRequest();
-//		Content c=new Content();
-////		c.setComposeType("onlyMain");
-////		ContentMain cm=new ContentMain();
-////		cm.setTitle1("内容3");
-////		cm.setPublishTime("0010-00-00");
-////		c.setMainContent(cm);
-//		ContentSub sub=new ContentSub();
-//		sub.setTitle1("内容分集1");
-//		sub.setMainId(4);
-//		List<ContentSub> list=new ArrayList<ContentSub>();
-//		list.add(sub);
-//		c.setComposeType("onlySub");
-//		c.setSubContentList(list);
-//		req.setContent(c);
-//		ContentCreateResponse resp=Sdk.contentCreate(req);
-//		System.out.println(new Gson().toJson(resp));
+		
+	}
 
-//		String publishtime=cm.getPublishTime()==""?"0000-00-00":cm.getPublishTime();
-//		System.out.println(publishtime);
+	public static class Conf {
+		public static String product_code =  "zuixinwen";
 	}
 	public static class Url
 	{
 		//专区列表查询
 		public static String SectionQueryUrl=
 //			"http://127.0.0.1:8080/jc.content.webapi/section_query";
-			"http://test.biedese.cn/content.webapi/section_query";
+				"http://test.biedese.cn/content.webapi/section_query";
 		//专区列表及列表内容查询
 		public static String SectionWithContentQueryUrl=
-			"http://test.biedese.cn/content.webapi/sectionwithcontent_query";
+				"http://test.biedese.cn/content.webapi/sectionwithcontent_query";
+		//			"http://127.0.0.1:8080/jc.content.webapi/sectionwithcontent_query";
 		//专区列表内容查询
 		public static String ContentListOfsectionUrl=
 //			"http://127.0.0.1:8080/jc.content.webapi/contentlistofsection_query";
-			"http://test.biedese.cn/content.webapi/contentlistofsection_query";
+				"http://test.biedese.cn/content.webapi/contentlistofsection_query";
 		//创建主内容
 		public static String ContenCreatetUrl=
-			"http://test.biedese.cn/content.webapi/content_create";
+//			"http://127.0.0.1:8080/jc.content.webapi/content_create";
+				"http://test.biedese.cn/content.webapi/content_create";
 		//创建子内容
 		public static String ContentSubCreateUrl=
-			"http://test.biedese.cn/content.webapi/contentsub_create";
+				"http://test.biedese.cn/content.webapi/contentsub_create";
 		//创建多条内容
 		public static String ContentListCreateUrl=
-			"http://test.biedese.cn/content.webapi/contentlist_create";
-		//产品分类查询
-		public static String TypeQueryUrl=
-			"http://test.biedese.cn/content.webapi/type_query";
-//			"http://127.0.0.1:8080/jc.content.webapi/type_query";
+				"http://test.biedese.cn/content.webapi/contentlist_create";
+		//产品分类1查询
+		public static String Type1QueryUrl=
+				"http://test.biedese.cn/content.webapi/type1_query";
+		//			"http://127.0.0.1:8080/jc.content.webapi/type1_query";
+		//产品分类2查询
+		public static String Type2QueryUrl=
+				"http://test.biedese.cn/content.webapi/type2_query";
+		//			"http://127.0.0.1:8080/jc.content.webapi/type2_query";
 		//分类内容查询
 		public static String ContentListByTypeQueryUrl=
 			"http://test.biedese.cn/content.webapi/contentlistbytype_query";
-//			"http://127.0.0.1:8080/jc.content.webapi/contentlistbytype_query";
+		//		"http://127.0.0.1:8080/jc.content.webapi/contentlistbytype_query";
+		public static String ContentListByTypeQueryJsonPUrl=
+				"http://test.biedese.cn/content.webapi/contentlistbytype_queryjsonp";
+//			"http://127.0.0.1:8080/jc.content.webapi/contentlistbytype_queryjsonp";
+
+		public static String Type1WithContentQueryUrl=
+				"http://test.biedese.cn/content.webapi/type1_with_content_query";
+//			"http://127.0.0.1:8080/jc.content.webapi/type1_with_content_query";
+
+		public static String Type2WithContentQueryUrl=
+				"http://test.biedese.cn/content.webapi/type2_with_content_query";
+		//			"http://127.0.0.1:8080/jc.content.webapi/type2_with_content_query";
 		//精准查询一条内容
 		public static String ContentPreciseQuery=
 //			"http://127.0.0.1:8080/jc.content.webapi/contentprecise_query";
-			"http://test.biedese.cn/content.webapi/contentprecise_query";
+				"http://test.biedese.cn/content.webapi/contentprecise_query";
 		//精准查询多条内容
 		public static String ContentListPreciseQuery=
 //			"http://127.0.0.1:8080/jc.content.webapi/contentlistprecise_query";
-			"http://test.biedese.cn/content.webapi/contentlistprecise_query";
-	
+				"http://test.biedese.cn/content.webapi/contentlistprecise_query";
+
 		public static String ContentVagueQuery=
 //			"http://127.0.0.1:8080/jc.content.webapi/contentvague_query";
-			"http://test.biedese.cn/content.webapi/contentvague_query";
-		
+				"http://test.biedese.cn/content.webapi/contentvague_query";
+
+		public static String ContentListOfCreatorQuery=
+//			"http://127.0.0.1:8080/jc.content.webapi/contentlistofcreator_query";
+				"http://test.biedese.cn/content.webapi/contentlistofcreator_query";
+
+		public static String BoardWithContentQueryUrl=
+//			"http://test.biedese.cn/content.webapi/board_with_content_query";
+				"http://127.0.0.1:8080/jc.content.webapi/board_with_content_query";
+		public static String ContentListOfBoardQueryUrl=
+//			"http://test.biedese.cn/content.webapi/content_list_of_board_query";
+				"http://127.0.0.1:8080/jc.content.webapi/content_list_of_board_query";
+
+		public static String BoardQueryUrl=
+//			"http://test.biedese.cn/content.webapi/board_query";
+				"http://127.0.0.1:8080/jc.content.webapi/board_query";
 	}
 	
-//	public static SectionQueryResponse sectionQuery(String productCode, String channelId)
+//	public static SectionQueryResponse sectionQuery(String productCode,String channelId)
 //	{
 //		SectionQueryRequest req=new SectionQueryRequest();
 //		req.setChannelId(channelId);
@@ -82,7 +97,7 @@ public class Sdk
 //
 //	}
 //
-//	public static SectionWithContentQueryResponse sectionWithContentQuery(String productCode, String channelId, int pageSize)
+//	public static SectionWithContentQueryResponse sectionWithContentQuery(String productCode,String channelId,int pageSize)
 //	{
 //		SectionWithContentQueryRequest req=new SectionWithContentQueryRequest();
 //		req.setChannelId(channelId);
@@ -93,12 +108,12 @@ public class Sdk
 //
 //	}
 //
-//	public static ContentListOfSectionQueryResponse contentListOfSectionQuery(String productCode, int sectionId, int startId, int pageSize)
+//	public static ContentListOfSectionQueryResponse contentListOfSectionQuery(String productCode,int sectionId,int pageNum,int pageSize)
 //	{
 //		ContentListOfSectionQueryRequest req=new ContentListOfSectionQueryRequest();
 //		req.setProductCode(productCode);
 //		req.setSectionId(sectionId);
-//		req.setStartId(startId);
+//		req.setPageNum(pageNum);
 //		req.setPageSize(pageSize);
 //		ContentListOfSectionQueryResponse resp=HttpPost.callObject(Url.ContentListOfsectionUrl, req, ContentListOfSectionQueryResponse.class);
 //		return resp;
@@ -125,9 +140,15 @@ public class Sdk
 //	}
 //
 //
-//	public static TypeQueryResponse typeQuery(TypeQueryRequest req)
+//	public static TypeQueryResponse type1Query(TypeQueryRequest req)
 //	{
-//		TypeQueryResponse resp=HttpPost.callObject(Url.TypeQueryUrl, req, TypeQueryResponse.class);
+//		TypeQueryResponse resp=HttpPost.callObject(Url.Type1QueryUrl, req, TypeQueryResponse.class);
+//		return resp;
+//	}
+//
+//	public static TypeQueryResponse type2Query(TypeQueryRequest req)
+//	{
+//		TypeQueryResponse resp=HttpPost.callObject(Url.Type2QueryUrl, req, TypeQueryResponse.class);
 //		return resp;
 //	}
 //
@@ -152,6 +173,25 @@ public class Sdk
 //	public static ContentVagueQueryResponse contentVagueQuery(ContentVagueQueryRequest req)
 //	{
 //		ContentVagueQueryResponse resp=HttpPost.callObject(Url.ContentVagueQuery, req, ContentVagueQueryResponse.class);
+//		return resp;
+//	}
+//
+//
+//	public static ContentListOfCreatorQueryResponse contentListOfCreatorQuery(ContentListOfCreatorQueryRequest req)
+//	{
+//		ContentListOfCreatorQueryResponse resp=HttpPost.callObject(Url.ContentListOfCreatorQuery, req, ContentListOfCreatorQueryResponse.class);
+//		return resp;
+//	}
+//
+//	public static ContentListWithTypeQueryResponse contentListWithType1Query(ContentListWithTypeQueryRequest req)
+//	{
+//		ContentListWithTypeQueryResponse resp=HttpPost.callObject(Url.ContentListWithType1QueryUrl, req, ContentListWithTypeQueryResponse.class);
+//		return resp;
+//	}
+//
+//	public static ContentListWithTypeQueryResponse contentListWithType2Query(ContentListWithTypeQueryRequest req)
+//	{
+//		ContentListWithTypeQueryResponse resp=HttpPost.callObject(Url.ContentListWithType2QueryUrl, req, ContentListWithTypeQueryResponse.class);
 //		return resp;
 //	}
 }

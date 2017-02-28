@@ -74,7 +74,7 @@ public class SplashActivity extends BaseActivity {
 
         ShareSDK.initSDK(this);
 
-        checkVersionUpdate();
+        //checkVersionUpdate();
 
 
         new Thread() {

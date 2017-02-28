@@ -3,7 +3,6 @@ package cn.com.ichile.pigplayer.item;
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 
 import cn.com.ichile.pigplayer.calculator.items.ListItem;
 import cn.com.ichile.pigplayer.core.manager.PlayerManager;
@@ -76,6 +75,6 @@ public abstract class BaseVideoItem implements ListItem,VideoItem {
         stopPlayback(mPlayerManager);
     }
 
-    public View createView(ViewGroup parent,int )
+   // public View createView(ViewGroup parent,int )
 
 }

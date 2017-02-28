@@ -17,6 +17,7 @@ import cn.com.ichile.topvideonews.activity.MainActivity;
 import cn.com.ichile.topvideonews.adapter.RecommendRecyAdapter;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
 import cn.com.ichile.topvideonews.net.DataUtil;
+import cn.com.ichile.topvideonews.util.Logger;
 import cn.com.ichile.topvideonews.util.UiUtil;
 
 /**
@@ -25,6 +26,7 @@ import cn.com.ichile.topvideonews.util.UiUtil;
  */
 
 public class RecommendFragment extends BaseFragment {
+    private static final String TAG = "RecommendFragment";
     private SwipeRefreshLayout mSwipeRef;
     private RecyclerView mRecycleView;
     private RecommendRecyAdapter mRecommendRecyAdapter;
@@ -58,7 +60,9 @@ public class RecommendFragment extends BaseFragment {
         }
         //设置数据
         // DataUtil.getVideoList(Cons.RECOMMEND, mRecommendRecyAdapter);
-        DataUtil.getContentList(mRecommendRecyAdapter,typeCode,type);
+        Logger.i(TAG, "getMoreSectionList startId--RecommendFragment");
+        DataUtil.getContentList(mRecommendRecyAdapter,typeCode);
+        startId = 1;
     }
 
     long startId = 1;
@@ -84,7 +88,7 @@ public class RecommendFragment extends BaseFragment {
                     //long startId = size <= 1 ? 0 : mRecommendRecyAdapter.getData().get(mRecommendRecyAdapter.getData().size() - 1).getMainContent().getId();
 
 //                    DataUtil.getMoreSectionList(mRecommendRecyAdapter, productCode, sectionId, ++startId);
-                    DataUtil.getMoreContentList(mRecommendRecyAdapter, typeCode, type, ++startId);
+                    DataUtil.getMoreContentList(mRecommendRecyAdapter, typeCode, ++startId);
                 }
 
             }
@@ -105,20 +109,11 @@ public class RecommendFragment extends BaseFragment {
         mSwipeRef.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                Snackbar snackbar = Snackbar.make(view, "已刷新", Snackbar.LENGTH_SHORT)
-//                        .setAction("确定", null);
-//                snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorActionBar));
-//                View snackbarView = snackbar.getView();
-//                TextView tv = (TextView) snackbarView.findViewById(R.id.snackbar_text);
-//                Button button = (Button) snackbarView.findViewById(R.id.snackbar_action);
-//                tv.setGravity(Gravity.CENTER);
-//                tv.setTextSize(18);
-//                button.setTextColor(getResources().getColor(R.color.colorWhite));
-//                snackbar.show();
-
 
                 UiUtil.showSimpleSnackbar(getContext(), view, "已刷新", "确定", null);
-                DataUtil.getContentList(mRecommendRecyAdapter, typeCode, type);
+                DataUtil.getContentList(mRecommendRecyAdapter, typeCode);
+                Logger.i(TAG, "getMoreSectionList startId--RecommendFragmentSwipeRef");
+                startId = 1;
             }
         });
     }
@@ -129,6 +124,7 @@ public class RecommendFragment extends BaseFragment {
         return mRecommendRecyAdapter;
     }
 
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -137,7 +133,8 @@ public class RecommendFragment extends BaseFragment {
         //初始化首页数据
         if (mainActivity.getPagerPosition() == 0) {
             //DataUtil.getVideoList(Cons.RECOMMEND, mRecommendRecyAdapter);
-            DataUtil.getContentList(mRecommendRecyAdapter, typeCode, type);
+            DataUtil.getContentList(mRecommendRecyAdapter, typeCode);
+            Logger.i(TAG, "getMoreSectionList startId--RecommendFragment onActivityCreated");
         }
 
         onScrollListener = new RecyclerView.OnScrollListener() {

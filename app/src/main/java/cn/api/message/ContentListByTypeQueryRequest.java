@@ -1,33 +1,42 @@
 package cn.api.message;
 
 public class ContentListByTypeQueryRequest {
-    private int typeNum = 0;
-    private String typeCode;
-    private long startId;
-    private int pageSize;
+    private String productCode;// 产品代号 例如：zuixinwen
+    private int type1Code = 0; //
+    private int type2Code = 0; // 分类代号  测试请使用1
+    private long pageNum; // 页码  1,2,3...
+    private int pageSize; //每页数量
 
-    public int getTypeNum() {
-        return typeNum;
+    public String getProductCode() {
+        return productCode;
     }
 
-    public void setTypeNum(int typeNum) {
-        this.typeNum = typeNum;
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 
-    public String getTypeCode() {
-        return typeCode;
+    public int getType1Code() {
+        return type1Code;
     }
 
-    public void setTypeCode(String typeCode) {
-        this.typeCode = typeCode;
+    public void setType1Code(int type1Code) {
+        this.type1Code = type1Code;
     }
 
-    public long getStartId() {
-        return startId;
+    public int getType2Code() {
+        return type2Code;
     }
 
-    public void setStartId(long startId) {
-        this.startId = startId;
+    public void setType2Code(int type2Code) {
+        this.type2Code = type2Code;
+    }
+
+    public long getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(long pageNum) {
+        this.pageNum = pageNum;
     }
 
     public int getPageSize() {
@@ -37,5 +46,4 @@ public class ContentListByTypeQueryRequest {
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
-
 }

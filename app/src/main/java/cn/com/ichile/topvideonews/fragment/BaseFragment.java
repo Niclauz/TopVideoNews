@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cn.api.model.Type;
+import cn.api.model.Type1;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
 
 /**
@@ -18,17 +18,16 @@ import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
 public abstract class BaseFragment extends Fragment {
     //当页面可见时数据加载
     protected boolean isVisiable;
-    protected String typeCode;
+    protected int typeCode;
     protected String typeName;
     protected int type;
 
     @Override
     public void setArguments(Bundle args) {
-        Type type = (Type) args.getSerializable("type");
+        Type1 type = (Type1) args.getSerializable("type");
         if (type != null) {
-            typeCode = type.getCode();
+            typeCode = type.getType1Code();
             typeName = type.getName();
-            this.type = type.getType();
         }
         super.setArguments(args);
     }

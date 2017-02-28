@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.api.message.TypeQueryResponse;
-import cn.api.model.Type;
+import cn.api.message.Type1QueryResponse;
+import cn.api.model.Type1;
 import cn.com.ichile.topvideonews.callback.OnFragmentBind;
 import cn.com.ichile.topvideonews.callback.OnNetDataCallback;
 import cn.com.ichile.topvideonews.fragment.RecommendFragment;
@@ -24,7 +24,7 @@ import cn.com.ichile.topvideonews.fragment.RecommendFragment;
 
 public class FragmentAdapter extends FragmentPagerAdapter implements OnNetDataCallback {
     private List<Fragment> mFragmentList;
-    private List<Type> mTitleList;
+    private List<Type1> mTitleList;
     private TabLayout mTabLayout;
     private Fragment mCurrentFragment;
     private OnFragmentBind mOnFragmentBind;
@@ -68,8 +68,8 @@ public class FragmentAdapter extends FragmentPagerAdapter implements OnNetDataCa
 
     @Override
     public void onSuccess(Object... data) {
-        if (data[0] instanceof TypeQueryResponse) {
-            TypeQueryResponse responses = (TypeQueryResponse) data[0];
+        if (data[0] instanceof Type1QueryResponse) {
+            Type1QueryResponse responses = (Type1QueryResponse) data[0];
             mTitleList = responses.getTypeList();
             if (mFragmentList == null) {
                 mFragmentList = new ArrayList<>();
