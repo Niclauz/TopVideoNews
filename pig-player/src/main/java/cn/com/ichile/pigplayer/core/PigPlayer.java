@@ -366,7 +366,7 @@ public class PigPlayer extends ScalableTextureView
                     mReadyForPlaybackIndicator.setSurfaceTextureAvailable(true);
 
                     if (mReadyForPlaybackIndicator.isReadyForPlayback()) {
-                        Logger.v(TAG, "notify ready for playback");
+                        Logger.v(TAG, "***notify ready for playback");
                         mReadyForPlaybackIndicator.notifyAll();
                     }
                 }
@@ -703,9 +703,9 @@ public class PigPlayer extends ScalableTextureView
     };
 
     private void checkThread() {
-//        if (Looper.myLooper() == Looper.getMainLooper()) {
-//            throw new RuntimeException("cannot be in main thread");
-//        }
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            throw new RuntimeException("cannot be in main thread");
+        }
     }
 
 

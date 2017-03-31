@@ -1,12 +1,11 @@
 <component name="libraryTable">
   <library name="espresso-idling-resource-2.2.2">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/pig-player/build/intermediates/exploded-aar/com.android.support.test.espresso/espresso-idling-resource/2.2.2/res" />
-      <root url="jar://$PROJECT_DIR$/pig-player/build/intermediates/exploded-aar/com.android.support.test.espresso/espresso-idling-resource/2.2.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/fe21be9554d49ce6e63ecd693cbc823e3cb72b4c/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/fe21be9554d49ce6e63ecd693cbc823e3cb72b4c/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://C:/WZQ/soft/AsSdk/extras/android/m2repository/com/android/support/test/espresso/espresso-idling-resource/2.2.2/espresso-idling-resource-2.2.2-sources.jar!/" />
       <root url="jar://C:/WZQ/soft/AsSdk/extras/android/m2repository/com/android/support/test/espresso/espresso-idling-resource/2.2.2/espresso-idling-resource-2.2.2-sources.jar!/" />
     </SOURCES>
   </library>

@@ -6,11 +6,13 @@ def javaVersion = JavaVersion.VERSION_1_7
 
 def bakPath = file("${buildDir}/bakApk/")
 
+def TINKER_ENABLE = false
+
 
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "21.1.2"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "cn.com.ichile.topvideonews"
@@ -48,7 +50,7 @@ android {
 
     //recommend
     dexOptions {
-        jumboMode = true
+        jumboMode = false
     }
 
     signingConfigs {
@@ -139,9 +141,9 @@ dependencies {
     //可选，用于生成application类
     provided 'com.tencent.tinker:tinker-android-anno:1.7.6'
     //tinker的核心库
-    compile 'com.tencent.tinker:tinker-android-lib:1.7.6'
-    compile("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") { changing = true }
-    provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
+//    compile 'com.tencent.tinker:tinker-android-lib:1.7.6'
+//    compile("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") { changing = true }
+//    provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
     compile 'com.android.support:multidex:1.0.1'
     compile project(':list-visibility-utils')
     compile project(':video-player-manager')
@@ -167,7 +169,7 @@ def gitSha() {
  */
 ext {
     //for some reason, you may want to ignore tinkerBuild, such as instant run debug build?
-    tinkerEnabled = true
+    tinkerEnabled = false
 
     //for normal build
     //old apk file to build patch apk

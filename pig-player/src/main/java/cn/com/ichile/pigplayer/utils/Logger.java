@@ -22,34 +22,35 @@ public class Logger {
 
     private static final int E = 5;
 
+
     public static void e(final String TAG, final String message) {
         if (level >= E)
-            Log.e(TAG, attachThreadId(message));
+            Log.e("---" + TAG, attachThreadId(message));
     }
 
     public static void e(final String TAG, final String message, Throwable throwable) {
         if (level >= E)
-            Log.e(TAG, attachThreadId(message), throwable);
+            Log.e("---" +TAG, attachThreadId(message), throwable);
     }
 
     public static void w(final String TAG, final String message) {
         if (level >= W)
-            Log.w(TAG, attachThreadId(message));
+            Log.w("---" +TAG, attachThreadId(message));
     }
 
     public static void i(final String TAG, final String message) {
         if (level >= I)
-            Log.i(TAG, attachThreadId(message));
+            Log.i("---" +TAG, attachThreadId(message));
     }
 
     public static void d(final String TAG, final String message) {
         if (level >= D)
-            Log.d(TAG, attachThreadId(message));
+            Log.d("---" +TAG, attachThreadId(message));
     }
 
     public static void v(final String TAG, final String message) {
         if (level >= V)
-            Log.v(TAG, attachThreadId(message));
+            Log.v("---" +TAG, attachThreadId(message));
     }
 
     private static String attachThreadId(String str) {

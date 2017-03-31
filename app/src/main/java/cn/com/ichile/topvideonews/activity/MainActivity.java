@@ -180,7 +180,6 @@ public class MainActivity extends BaseActivity
         mViewPager.setAdapter(mFragmentAdapter);
         tabLayout.setupWithViewPager(mViewPager);
 
-
         mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

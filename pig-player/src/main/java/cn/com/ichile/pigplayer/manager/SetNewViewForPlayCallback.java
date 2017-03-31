@@ -2,7 +2,6 @@ package cn.com.ichile.pigplayer.manager;
 
 import cn.com.ichile.pigplayer.core.PigPlayer;
 import cn.com.ichile.pigplayer.core.PlayerMsgState;
-import cn.com.ichile.pigplayer.core.messages.PlayerMessage;
 import cn.com.ichile.pigplayer.core.meta.MetaData;
 
 /**
@@ -10,7 +9,7 @@ import cn.com.ichile.pigplayer.core.meta.MetaData;
  * Created by Nick Wong on 2017/2/16.
  */
 
-public class SetNewViewForPlayCallback extends PlayerMessage {
+public class SetNewViewForPlayCallback extends cn.com.ichile.pigplayer.core.messages.PlayerMessage {
     private MetaData mCurrentMetaData;
     private PigPlayer mCurrentPlayer;
     private PlayerManagerCallback mCurrentPlayerManagerCallback;

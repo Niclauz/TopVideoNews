@@ -1,12 +1,11 @@
 <component name="libraryTable">
   <library name="espresso-core-2.2.2">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/pig-player/build/intermediates/exploded-aar/com.android.support.test.espresso/espresso-core/2.2.2/res" />
-      <root url="jar://$PROJECT_DIR$/pig-player/build/intermediates/exploded-aar/com.android.support.test.espresso/espresso-core/2.2.2/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/c2f4bf2ad1b2947a6a2acba8db4a640e26b7e45f/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/c2f4bf2ad1b2947a6a2acba8db4a640e26b7e45f/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://C:/WZQ/soft/AsSdk/extras/android/m2repository/com/android/support/test/espresso/espresso-core/2.2.2/espresso-core-2.2.2-sources.jar!/" />
       <root url="jar://C:/WZQ/soft/AsSdk/extras/android/m2repository/com/android/support/test/espresso/espresso-core/2.2.2/espresso-core-2.2.2-sources.jar!/" />
     </SOURCES>
   </library>
