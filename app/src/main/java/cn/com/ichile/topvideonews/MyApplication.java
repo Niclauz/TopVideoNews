@@ -28,7 +28,7 @@ public class MyApplication extends Application {
                 //注册成功会返回device token
                 Log.i("App", deviceToken);
             }
-
+            //222222
             @Override
             public void onFailure(String s, String s1) {
                 Log.i("App", "fail--" + s + "--" + s1);
